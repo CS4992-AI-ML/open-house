@@ -1,6 +1,6 @@
 # Welcome to Project Open House
 
-## Team :)
+## Team
 - Diane
 - Owen
 - Luis
@@ -9,3 +9,4 @@
 - Spencer
 
 ## Roles
+Test
