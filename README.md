@@ -31,3 +31,9 @@ python ./src/tests/test-version.py
 ```angular2html
 3.11.0 (main, Mar  1 2023, 12:33:14) [Clang 14.0.6 ]
 ```
+
+## Step 4: Install Requirements
+
+```angular2html
+pip install -r ./src/requirements.txt
+```
