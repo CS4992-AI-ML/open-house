@@ -1,10 +1,10 @@
 # Welcome to Project Open House
 
-## Team
+## Team :)
 - Diane
 - Owen
 - Luis
-- Maggie
+- Maggie 
 - Maddie
 - Spencer
 
