@@ -33,7 +33,7 @@ python ./src/tests/test-version.py
 ```
 
 ## Step 4: Install Requirements
-
+### Anytime you want to add a library make sure to add it to the .txt
 ```angular2html
 pip install -r ./src/requirements.txt
 ```
