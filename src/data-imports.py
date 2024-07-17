@@ -2,7 +2,7 @@ import pandas as pd
 import os
 
 # Grab all .xls files in the data folder
-path = "data"
+path = "../data"
 extension = ".xls"
 files = [file for file in os.listdir(path) if file.endswith(extension)]
 

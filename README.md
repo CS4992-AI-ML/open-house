@@ -24,7 +24,7 @@ If not, double click the version -> Specify Version -> 3.11 -> Wait for install 
 ## Step 3: Test Interpreter is setup
 
 ```angular2html
-python ./src/tests/test-version.py
+python ./tests/test-version.py
 ```
 
 ### Result should be something similar to this
@@ -35,5 +35,5 @@ python ./src/tests/test-version.py
 ## Step 4: Install Requirements
 ### Anytime you want to add a library make sure to add it to the .txt
 ```angular2html
-pip install -r ./src/requirements.txt
+pip install -r ./requirements.txt
 ```
