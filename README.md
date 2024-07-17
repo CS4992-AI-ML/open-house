@@ -49,3 +49,16 @@ mkdir data
 
 Download files labeled part 1-12. Add to the data folder.
 Run data-imports.py. This will create `housing_data.csv`
+
+## *Interacting with AWS*
+Install [AWS CLI](https://aws.amazon.com/cli/) and install [boto3](https://pypi.org/project/boto3/) and login
+
+Once you have done and logged in, run this:
+```angular2html
+python ./tests/test-boto3.py
+```
+The output should look something like this:
+```angular2html
+Existing buckets:
+  silly-australia-bucket
+```
