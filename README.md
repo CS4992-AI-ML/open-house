@@ -37,3 +37,15 @@ python ./tests/test-version.py
 ```angular2html
 pip install -r ./requirements.txt
 ```
+
+## Step 5: Download Data
+### Follow this [link](https://northeastern-my.sharepoint.com/:f:/r/personal/igortn_northeastern_edu/Documents/DoCs/UTS-Projects/Rental%20prediction?csf=1&web=1&e=IPnzKu) to access data.
+
+In a git bash terminal run this to create a folder labeled `data` in `open-house` or just create the folder.
+
+```angular2html
+mkdir data
+```
+
+Download files labeled part 1-12. Add to the data folder.
+Run data-imports.py. This will create `housing_data.csv`
