@@ -5,5 +5,5 @@
     <option name="pathToExecutable" value="/opt/anaconda3/bin/black" />
     <option name="sdkName" value="open-house" />
   </component>
-  <component name="ProjectRootManager" version="2" project-jdk-name="open-house" project-jdk-type="Python SDK" />
+  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.11 (open-house)" project-jdk-type="Python SDK" />
 </project>
