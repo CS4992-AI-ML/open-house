@@ -13,4 +13,4 @@ for file in files:
     dfs.append(df)
 
 df = pd.concat(dfs, ignore_index=True)
-df.to_csv("data/housing_data.csv", index=False)
+df.to_csv("../data/housing_data.csv", index=False)
