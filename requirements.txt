@@ -1,6 +1,7 @@
-black == 24.4.2
-numpy==2.0.0
-pandas==2.2.2
-xlrd==2.0.1
-boto3==1.34.144
-botocore~=1.34.144
+black
+numpy
+pandas
+xlrd
+boto3
+botocore
+sagemaker
