@@ -5,3 +5,4 @@ xlrd==2.0.1
 boto3==1.34.144
 mysql-connector-python~=9.0.0
 python-dotenv~=1.0.1
+botocore~=1.34.144
