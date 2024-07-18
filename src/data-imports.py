@@ -12,5 +12,7 @@ for file in files:
     df = pd.read_excel(os.path.join(path, file))
     dfs.append(df)
 
+
 df = pd.concat(dfs, ignore_index=True)
+
 df.to_csv("../data/housing_data.csv", index=False)
