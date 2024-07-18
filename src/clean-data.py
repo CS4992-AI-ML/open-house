@@ -29,7 +29,7 @@ df.drop(
 df = df[df["Property Type"].isin(["Housing", "Unit"])]
 
 # Drop rows where any area value is 0
-df = df[~(df[["Area", "Building Area"]] == 0).any(axis=1)]
+df = df[~(df[["Area"]] == 0).any(axis=1)]
 
 # Drop rows where Street Display contains a hyphen or slash
 # df = df[~df["Street Display"].fillna("").str.contains(r"[-/]", na=False)]
@@ -80,6 +80,6 @@ df["Locality"] = df["Locality"].str.upper()  # Convert locality to uppercase
 df["Postcode"] = df["Postcode"].astype(str)  # Convert postcode to string if not already
 
 print(len(df))
-print(df.sample(100))
+
 
 df.to_csv("../data/cleaned_housing_data.csv", index=False)
