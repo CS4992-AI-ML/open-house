@@ -34,27 +34,31 @@ def get_csv_from_s3(bucket, key):
 
 
 def get_column_from_s3(data_frame, column_name):
-    return csv_data[column_name]
+    return data_frame[column_name]
 
 
 json_data = get_json_from_s3(bucket_name, json_file_key)
 csv_data = get_csv_from_s3(bucket_name, csv_file_key)
-column_name = 'Agent'
+column_name = "Agent"
 
 # Prints out the first 20 lines of the csv_data file
 if csv_data is not None and not csv_data.empty:
     print(
-        f"CSV Data from \nS3 Bucket: [{bucket_name}] \nFile: [{csv_file_key}] \n{csv_data.head(20)}\n")
+        f"CSV Data from \nS3 Bucket: [{bucket_name}] \nFile: [{csv_file_key}] \n{csv_data.head(20)}\n"
+    )
 else:
     print("DataFrame is empty or could not be retrieved.")
 
 # Prints out the first 20 lines of the given column set in column_name
 print(
     f"Column data for column: \n[{column_name}] in [{csv_file_key}] "
-    f"\n{get_column_from_s3(csv_data, column_name).head(20)}")
+    f"\n{get_column_from_s3(csv_data, column_name).head(20)}"
+)
 
 # Prints out the contents of json_data
 if json_data:
-    print(f"JSON Data from \nS3 Bucket: [{bucket_name}] \nFile: [{json_file_key}] \n{json_data}")
+    print(
+        f"JSON Data from \nS3 Bucket: [{bucket_name}] \nFile: [{json_file_key}] \n{json_data}"
+    )
 else:
     print("Failed to retrieve JSON data from S3.")
