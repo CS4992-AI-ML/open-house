@@ -143,7 +143,7 @@ def upload_to_s3(file_name, bucket, object_name=None):
         upload_to_s3(file_name, bucket, object_name)
     except ClientError as e:
         if e.response["Error"]["Code"] == "404":
-            # The object does not exist, proceed with the upload
+            # The object does not exist, can proceed with the upload
             pass
         else:
             # Something else has gone wrong
