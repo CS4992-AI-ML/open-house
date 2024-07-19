@@ -1,8 +1,11 @@
+import boto3
 import pandas as pd
 import numpy as np
+from botocore.exceptions import NoCredentialsError
 from dotenv import load_dotenv
 import re
 from datetime import datetime
+from botocore.exceptions import NoCredentialsError, ClientError
 
 # Load the .env file
 load_dotenv()
@@ -65,8 +68,8 @@ df.drop(columns=["Listed Price"], inplace=True)
 
 # Compute the average number of bathrooms per bedroom, ignoring rows where bedrooms or bathrooms are zero
 bathrooms_per_bedroom = (
-    df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
-    / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
+        df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
+        / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
 )
 avg_bathrooms_per_bedroom = bathrooms_per_bedroom.mean()
 
@@ -77,8 +80,8 @@ df.loc[(df["Bathrooms"] == 0) & (df["Bedrooms"] != 0), "Bathrooms"] = np.round(
 
 # Compute the average number of bedrooms per bathroom, ignoring rows where bedrooms or bathrooms are zero
 bedrooms_per_bathroom = (
-    df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
-    / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
+        df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
+        / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
 )
 avg_bedrooms_per_bathroom = bedrooms_per_bathroom.mean()
 
@@ -86,7 +89,6 @@ avg_bedrooms_per_bathroom = bedrooms_per_bathroom.mean()
 df.loc[(df["Bedrooms"] == 0) & (df["Bathrooms"] != 0), "Bedrooms"] = np.round(
     df["Bathrooms"] * avg_bedrooms_per_bathroom
 )
-
 
 print("Average bathrooms per bedroom:", avg_bathrooms_per_bedroom)
 print("Average bedrooms per bathroom:", avg_bedrooms_per_bathroom)
@@ -109,5 +111,69 @@ df["Postcode"] = df["Postcode"].apply(
 
 print(len(df))
 
-
 df.to_csv("../data/cleaned_housing_data-nulls-fixed.csv", index=False)
+
+
+def upload_to_s3(file_name, bucket, object_name=None):
+    """
+    Upload a file to an S3 bucket
+
+    :param file_name: File to upload
+    :param bucket: Bucket to upload to
+    :param object_name: S3 object name. If not specified then file_name is used
+    :return: True if file was uploaded, else False
+    """
+    # If S3 object_name was not specified, use file_name
+    if object_name is None:
+        object_name = file_name
+
+    # Creating an S3 client
+    s3_client = boto3.client("s3")
+
+    # Check if the object already exists in the bucket
+    try:
+        s3_client.head_object(Bucket=bucket, Key=object_name)
+        print(
+            f"Error: The file '{object_name}' already exists in the bucket '{bucket}'.\n"
+        )
+        object_name = (
+                input("Enter the name of the file OR type 'cancel' to cancel the upload: ")
+                + ".csv"
+        )
+        upload_to_s3(file_name, bucket, object_name)
+    except ClientError as e:
+        if e.response["Error"]["Code"] == "404":
+            # The object does not exist, proceed with the upload
+            pass
+        else:
+            # Something else has gone wrong
+            print(f"Error checking if object exists: {e}")
+            return False
+
+    # Upload the file
+    s3_client = boto3.client("s3")
+    try:
+        s3_client.upload_file(file_name, bucket, object_name)
+    except FileNotFoundError:
+        print("The file was not found")
+        return False
+    except NoCredentialsError:
+        print("Credentials not available")
+        return False
+    return True
+
+
+# Example usage
+file_name = "../data/cleaned_housing_data-nulls-fixed.csv"
+bucket_name = "team-houses-bucket"
+object_name = (
+        input("Enter the name of the file OR type 'cancel' to cancel the upload: ") + ".csv"
+)
+if object_name.casefold() != "cancel.csv".casefold():
+    success = upload_to_s3(file_name, bucket_name, object_name)
+    if success:
+        print("Upload Successful")
+    else:
+        print("Upload Failed")
+else:
+    print("Upload Cancelled")
