@@ -68,8 +68,8 @@ df.drop(columns=["Listed Price"], inplace=True)
 
 # Compute the average number of bathrooms per bedroom, ignoring rows where bedrooms or bathrooms are zero
 bathrooms_per_bedroom = (
-        df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
-        / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
+    df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
+    / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
 )
 avg_bathrooms_per_bedroom = bathrooms_per_bedroom.mean()
 
@@ -80,8 +80,8 @@ df.loc[(df["Bathrooms"] == 0) & (df["Bedrooms"] != 0), "Bathrooms"] = np.round(
 
 # Compute the average number of bedrooms per bathroom, ignoring rows where bedrooms or bathrooms are zero
 bedrooms_per_bathroom = (
-        df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
-        / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
+    df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
+    / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
 )
 avg_bedrooms_per_bathroom = bedrooms_per_bathroom.mean()
 
@@ -93,7 +93,10 @@ df.loc[(df["Bedrooms"] == 0) & (df["Bathrooms"] != 0), "Bedrooms"] = np.round(
 print("Average bathrooms per bedroom:", avg_bathrooms_per_bedroom)
 print("Average bedrooms per bathroom:", avg_bedrooms_per_bathroom)
 
-df = df.dropna(subset=["Month Listed", "Postcode"])
+df = df.dropna(
+    subset=["Month Listed", "Postcode", "Weekly Price", "Parking", "Bedrooms"]
+)
+df = df[df["Weekly Price"] >= 150]
 
 # Fix month columns
 df["Relative Month"] = df["Month Listed"].apply(lambda x: get_relative_month(str(x)))
@@ -137,8 +140,8 @@ def upload_to_s3(file_name, bucket, object_name=None):
             f"Error: The file '{object_name}' already exists in the bucket '{bucket}'.\n"
         )
         object_name = (
-                input("Enter the name of the file OR type 'cancel' to cancel the upload: ")
-                + ".csv"
+            input("Enter the name of the file OR type 'cancel' to cancel the upload: ")
+            + ".csv"
         )
         upload_to_s3(file_name, bucket, object_name)
     except ClientError as e:
@@ -167,7 +170,7 @@ def upload_to_s3(file_name, bucket, object_name=None):
 file_name = "../data/cleaned_housing_data-nulls-fixed.csv"
 bucket_name = "team-houses-bucket"
 object_name = (
-        input("Enter the name of the file OR type 'cancel' to cancel the upload: ") + ".csv"
+    input("Enter the name of the file OR type 'cancel' to cancel the upload: ") + ".csv"
 )
 if object_name.casefold() != "cancel.csv".casefold():
     success = upload_to_s3(file_name, bucket_name, object_name)
