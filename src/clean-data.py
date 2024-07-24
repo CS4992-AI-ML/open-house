@@ -66,35 +66,35 @@ def get_relative_month(text):
 df["Weekly Price"] = df["Listed Price"].apply(lambda x: extract_weekly_price(str(x)))
 df.drop(columns=["Listed Price"], inplace=True)
 
-# Compute the average number of bathrooms per bedroom, ignoring rows where bedrooms or bathrooms are zero
-bathrooms_per_bedroom = (
-    df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
-    / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
-)
-avg_bathrooms_per_bedroom = bathrooms_per_bedroom.mean()
+# # Compute the average number of bathrooms per bedroom, ignoring rows where bedrooms or bathrooms are zero
+# bathrooms_per_bedroom = (
+#     df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
+#     / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
+# )
+# avg_bathrooms_per_bedroom = bathrooms_per_bedroom.mean()
+#
+# # Update the "Bathrooms" column where it is 0 and "Bedrooms" is not
+# df.loc[(df["Bathrooms"] == 0) & (df["Bedrooms"] != 0), "Bathrooms"] = np.round(
+#     df["Bedrooms"] * avg_bathrooms_per_bedroom
+# )
 
-# Update the "Bathrooms" column where it is 0 and "Bedrooms" is not
-df.loc[(df["Bathrooms"] == 0) & (df["Bedrooms"] != 0), "Bathrooms"] = np.round(
-    df["Bedrooms"] * avg_bathrooms_per_bedroom
-)
+# # Compute the average number of bedrooms per bathroom, ignoring rows where bedrooms or bathrooms are zero
+# bedrooms_per_bathroom = (
+#     df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
+#     / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
+# )
+# avg_bedrooms_per_bathroom = bedrooms_per_bathroom.mean()
+#
+# # Update the "Bedrooms" column where it is 0 and "Bathrooms" is not
+# df.loc[(df["Bedrooms"] == 0) & (df["Bathrooms"] != 0), "Bedrooms"] = np.round(
+#     df["Bathrooms"] * avg_bedrooms_per_bathroom
+# )
 
-# Compute the average number of bedrooms per bathroom, ignoring rows where bedrooms or bathrooms are zero
-bedrooms_per_bathroom = (
-    df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bedrooms"]
-    / df.loc[(df["Bedrooms"] != 0) & (df["Bathrooms"] != 0), "Bathrooms"]
-)
-avg_bedrooms_per_bathroom = bedrooms_per_bathroom.mean()
-
-# Update the "Bedrooms" column where it is 0 and "Bathrooms" is not
-df.loc[(df["Bedrooms"] == 0) & (df["Bathrooms"] != 0), "Bedrooms"] = np.round(
-    df["Bathrooms"] * avg_bedrooms_per_bathroom
-)
-
-print("Average bathrooms per bedroom:", avg_bathrooms_per_bedroom)
-print("Average bedrooms per bathroom:", avg_bedrooms_per_bathroom)
+# print("Average bathrooms per bedroom:", avg_bathrooms_per_bedroom)
+# print("Average bedrooms per bathroom:", avg_bedrooms_per_bathroom)
 
 df = df.dropna(
-    subset=["Month Listed", "Postcode", "Weekly Price", "Parking", "Bedrooms"]
+    # subset=["Month Listed", "Postcode", "Weekly Price", "Parking", "Bedrooms"]
 )
 df = df[df["Weekly Price"] >= 150]
 
@@ -140,8 +140,8 @@ def upload_to_s3(file_name, bucket, object_name=None):
             f"Error: The file '{object_name}' already exists in the bucket '{bucket}'.\n"
         )
         object_name = (
-            input("Enter the name of the file OR type 'cancel' to cancel the upload: ")
-            + ".csv"
+                input("Enter the name of the file OR type 'cancel' to cancel the upload: ")
+                + ".csv"
         )
         upload_to_s3(file_name, bucket, object_name)
     except ClientError as e:
@@ -167,10 +167,10 @@ def upload_to_s3(file_name, bucket, object_name=None):
 
 
 # Example usage
-file_name = "../data/cleaned_housing_data-nulls-fixed.csv"
+file_name = "../data/NoAgencies.csv"
 bucket_name = "team-houses-bucket"
 object_name = (
-    input("Enter the name of the file OR type 'cancel' to cancel the upload: ") + ".csv"
+        input("Enter the name of the file OR type 'cancel' to cancel the upload: ") + ".csv"
 )
 if object_name.casefold() != "cancel.csv".casefold():
     success = upload_to_s3(file_name, bucket_name, object_name)
