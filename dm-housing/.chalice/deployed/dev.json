@@ -1,0 +1,23 @@
+{
+  "resources": [
+    {
+      "name": "default-role",
+      "resource_type": "iam_role",
+      "role_arn": "arn:aws:iam::923732660828:role/dm-housing-dev",
+      "role_name": "dm-housing-dev"
+    },
+    {
+      "name": "api_handler",
+      "resource_type": "lambda_function",
+      "lambda_arn": "arn:aws:lambda:ap-southeast-2:923732660828:function:dm-housing-dev"
+    },
+    {
+      "name": "rest_api",
+      "resource_type": "rest_api",
+      "rest_api_id": "j9mjbu9od4",
+      "rest_api_url": "https://j9mjbu9od4.execute-api.ap-southeast-2.amazonaws.com/api/"
+    }
+  ],
+  "schema_version": "2.0",
+  "backend": "api"
+}

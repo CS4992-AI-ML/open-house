@@ -1,0 +1,10 @@
+black
+numpy
+pandas
+xlrd
+boto3
+mysql-connector-python
+python-dotenv
+botocore
+sagemaker
+chalice

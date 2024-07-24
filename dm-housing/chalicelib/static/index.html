@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SageMaker Model Frontend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #F0F0F0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        .button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .button:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #E9ECEF;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predict with SageMaker Model</h1>
+
+        <div class="form-group">
+            <label for="inputData">Enter Number of Bedrooms:</label>
+            <input type="number" id="inputBedrooms" />
+        </div>
+
+        <div class="form-group">
+            <label for="inputData">Enter Number of Bathrooms:</label>
+            <input type="number" id="inputBathrooms" />
+        </div>
+
+        <div class="form-group">
+            <label for="inputData">Enter Area (square meters):</label>
+            <input type="text" id="inputArea" />
+        </div>
+
+        <div class="form-group">
+            <label for="inputData">Select Property Type:</label>
+            <select id="propertyType">
+                <option value="Unit">Unit</option>
+                <option value="House">House</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+        <label for="inputData">Select Locality:</label>
+        <select id="Locality">
+            <!-- Options will be populated here by JavaScript -->
+        </select>
+    </div>
+
+    <script>
+        // Define the list of localities
+        const localities = ['Locality1', 'Locality2', 'Locality3', 'Locality4'];
+
+        // Get the select element
+        const selectElement = document.getElementById('Locality');
+
+        // Populate the select element with options
+        localities.forEach(locality => {
+            const option = document.createElement('option');
+            option.value = locality.toLowerCase();
+            option.textContent = locality;
+            selectElement.appendChild(option);
+        });
+    </script>
+
+        <button class="button" id="predictButton">Predict Price in AUD$ per week</button>
+        <div class="result" id="result"></div>
+    </div>
+    <script>
+        document.getElementById('predictButton').addEventListener('click', async () => {
+            const inputData = document.getElementById('inputData').value;
+            const resultDiv = document.getElementById('result');
+            if (!inputData) {
+                alert('Please enter input data');
+                return;
+            }
+            resultDiv.textContent = 'Predicting...';
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ input: inputData })
+                });
+                const result = await response.json();
+                resultDiv.textContent = `Prediction: ${result.prediction}`;
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.textContent = 'An error occurred while making the prediction.';
+            }
+        });
+    </script>
+</body>
+</html>
