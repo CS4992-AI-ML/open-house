@@ -1,5 +1,82 @@
+import time
+
+import boto3
+import pandas as pd
+from botocore.exceptions import ClientError, NoCredentialsError
+import sagemaker
+from sagemaker.model import Model
+
 lessThanAgencies = {}
 greaterThanAgencies = {}
+
+# Initialize a session using Amazon S3
+s3 = boto3.client("s3")
+
+# Specify the bucket name and the name you want to give the file
+bucket_name = "team-houses-bucket"
+key = "maggie-3.csv"
+name = "housing-data"
+nameCSV = "housing-data.csv"
+
+# Download the file from S3
+s3.download_file(bucket_name, key, nameCSV)
+
+print(f"File {key} downloaded from bucket {bucket_name} to {nameCSV}\n")
+
+# Read the downloaded CSV file into a DataFrame
+df = pd.read_csv(nameCSV)
+
+# Replace the contents of the specified columns with blank space
+df["Agency_Name"] = ""
+df["Agent"] = ""
+
+# Save the modified DataFrame to a new CSV file
+df.to_csv(name + "-noAgencies.csv", index=False)
+
+print(f"Modified file saved to {name}-noAgencies.csv")
+
+
+def upload_to_s3(file_name, bucket, object_name=None):
+    """
+    Upload a file to an S3 bucket
+
+    :param file_name: File to upload
+    :param bucket: Bucket to upload to
+    :param object_name: S3 object name. If not specified then file_name is used
+    :return: True if file was uploaded, else False
+    """
+    # If S3 object_name was not specified, use file_name
+    if object_name is None:
+        object_name = file_name
+
+    # Creating an S3 client
+    s3_client = boto3.client("s3")
+
+    # Upload the file
+    s3_client = boto3.client("s3")
+    try:
+        s3_client.upload_file(file_name, bucket, object_name)
+    except FileNotFoundError:
+        print("The file was not found")
+        return False
+    except NoCredentialsError:
+        print("Credentials not available")
+        return False
+    return True
+
+
+file_name = "housing-data-noAgencies.csv"
+bucket_name = "team-houses-bucket"
+object_name = file_name
+if object_name.casefold() != "cancel.csv".casefold():
+    success = upload_to_s3(file_name, bucket_name, object_name)
+    if success:
+        print("Upload Successful")
+    else:
+        print("Upload Failed")
+else:
+    print("Upload Cancelled")
+
 # Open the file and read lines
 with open("../data/lessThanAgencies.txt") as f:
     for line in f:

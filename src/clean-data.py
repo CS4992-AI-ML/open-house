@@ -1,7 +1,5 @@
 import boto3
 import pandas as pd
-import numpy as np
-from botocore.exceptions import NoCredentialsError
 from dotenv import load_dotenv
 import re
 from datetime import datetime
@@ -166,7 +164,6 @@ def upload_to_s3(file_name, bucket, object_name=None):
     return True
 
 
-# Example usage
 file_name = "../data/NoAgencies.csv"
 bucket_name = "team-houses-bucket"
 object_name = (
