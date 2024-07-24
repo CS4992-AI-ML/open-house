@@ -1,7 +1,10 @@
+import boto3
 import pandas as pd
 from dotenv import load_dotenv
-import re
-from datetime import datetime
+from botocore.exceptions import NoCredentialsError, ClientError
+
+from s3 import upload_to_s3
+from util import get_relative_month, extract_weekly_price
 
 # Load the .env file
 load_dotenv()
@@ -12,60 +15,23 @@ csv_file_path = "../data/housing_data.csv"
 # Read the CSV file into a DataFrame
 df = pd.read_csv(csv_file_path)
 
-df.drop(
-    columns=[
-        "Status",
-        "Current Owners",
-        "Current Owners Address",
-        # "PDS Property ID",
-        "PDS Listing ID",
-        "Government Number",
-        "Parent Government Number",
-    ],
-    inplace=True,
+df = df.dropna(
+    subset=[
+        "Month Listed",
+        "Postcode",
+    ]
 )
 
 # Drop rows where Property Type is not Housing or Unit
-df = df[df["Property Type"].isin(["Housing", "Unit"])]
+df = df[df["Property Type"].isin(["House", "Unit"])]
 
-# Drop rows where any area value is 0
-df = df[~(df[["Area"]] == 0).any(axis=1)]
-
-# Drop rows where Street Display contains a hyphen or slash
-# df = df[~df["Street Display"].fillna("").str.contains(r"[-/]", na=False)]
-
-# Regular expression pattern to find weekly price
-pattern = r"\$?(\d{1,3}(?:,\d{3})*(?:\.\d{2})?)\s*(?!(?:per\s*month|month|/m))\s*(?:per\s*week|week|wk|w|pw)?"
-
-
-# Function to extract and convert price to integer
-def extract_weekly_price(text):
-    match = re.search(pattern, text, flags=re.IGNORECASE)
-    if match:
-        price_str = match.group(1)  # Extract the price string
-        price_str = price_str.replace(",", "")
-        price = int(float(price_str))  # Convert to float and then to integer
-        return price
-    else:
-        print(text)
-    return None
-
-
-ref_date = datetime(2024, 6, 1)
-
-
-def get_relative_month(text):
-    date = datetime.strptime(text, "%b %Y")
-    diff_years = ref_date.year - date.year
-    diff_months = ref_date.month - date.month
-
-    return diff_years * 12 + diff_months
-
-
+# Grab the weekly price
 df["Weekly Price"] = df["Listed Price"].apply(lambda x: extract_weekly_price(str(x)))
-df.drop(columns=["Listed Price"], inplace=True)
-
-df = df.dropna()
+df = df.dropna(
+    subset=[
+        "Weekly Price",
+    ]
+)
 
 # Fix month columns
 df["Relative Month"] = df["Month Listed"].apply(lambda x: get_relative_month(str(x)))
@@ -74,12 +40,30 @@ df["Month Listed"] = df["Month Listed"].apply(
 )
 
 df["Locality"] = df["Locality"].str.upper()  # Convert locality to uppercase
-
-df["Street Name"] = df["Street Name"].str.upper()  # Convert street_name to uppercase
 df["Locality"] = df["Locality"].str.upper()  # Convert locality to uppercase
-df["Postcode"] = df["Postcode"].astype(str)  # Convert postcode to string if not already
+df["Postcode"] = df["Postcode"].apply(
+    lambda x: "X" + str(int(x))
+)  # Convert postcode to string if not already
 
-print(len(df))
+print("Total rows:", len(df))
+
+df = df.sort_values(by="Weekly Price", ascending=True)
+df.columns = [col.strip().replace(" ", "_") for col in df.columns]
+
+# Example usage
+file_name = input("Enter the name of the file: \n") + ".csv"
 
 
-df.to_csv("../data/cleaned_housing_data.csv", index=False)
+# Export the cleaned data to a new CSV file
+df.to_csv(f"../data/{file_name}", index=False)
+
+confirmation_str = input("Upload to s3 (y/n)?\n")
+
+if confirmation_str.casefold() == "y".casefold():
+    success = upload_to_s3(f"../data/{file_name}", "team-houses-bucket", file_name)
+    if success:
+        print("Upload Successful")
+    else:
+        print("Upload Failed")
+else:
+    print("Upload Cancelled")
