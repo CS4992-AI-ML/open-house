@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import boto3
 import pandas as pd
 from dotenv import load_dotenv
@@ -68,4 +70,4 @@ if confirmation_str.casefold() == "y".casefold():
 else:
     print("Upload Cancelled")
 
-print(df["Locality"].unique())
+print(df["Agency_Name"].unique()[:500])

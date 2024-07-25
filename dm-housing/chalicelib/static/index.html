@@ -29,10 +29,22 @@
             display: block;
             margin-bottom: 5px;
         }
-        .form-group input {
+        .form-group input, .form-group select {
             width: 100%;
             padding: 8px;
             box-sizing: border-box;
+        }
+        .range-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .range-value {
+            width: 80px;
+            text-align: center;
+            padding: 8px;
+            background-color: #E9ECEF;
+            border-radius: 4px;
         }
         .button {
             padding: 10px 20px;
@@ -59,77 +71,115 @@
         <h1>Predict with SageMaker Model</h1>
 
         <div class="form-group">
-            <label for="inputData">Enter Number of Bedrooms:</label>
+            <label for="inputBedrooms">Enter Number of Bedrooms:</label>
             <input type="number" id="inputBedrooms" />
         </div>
 
         <div class="form-group">
-            <label for="inputData">Enter Number of Bathrooms:</label>
+            <label for="inputBathrooms">Enter Number of Bathrooms:</label>
             <input type="number" id="inputBathrooms" />
         </div>
 
         <div class="form-group">
-            <label for="inputData">Enter Area (square meters):</label>
-            <input type="text" id="inputArea" />
+            <label for="inputArea">Enter Area (square meters):</label>
+            <div class="range-container">
+                <input type="range" id="inputArea" min="100" max="4000" value="0" />
+                <div id="rangeValue" class="range-value">Not specified</div>
+            </div>
         </div>
 
         <div class="form-group">
-            <label for="inputData">Select Property Type:</label>
-            <select id="propertyType">
+            <label for="propertyType">Select Property Type:</label>
+            <select id="propertyType" required>
+                <option value="">Select a property type</option>
                 <option value="Unit">Unit</option>
                 <option value="House">House</option>
             </select>
         </div>
 
         <div class="form-group">
-        <label for="inputData">Select Locality:</label>
-        <select id="Locality">
-            <!-- Options will be populated here by JavaScript -->
-        </select>
-    </div>
+            <label for="Locality">Select Locality:</label>
+            <select id="Locality">
+                <option value="">Select a locality</option>
+            </select>
+        </div>
 
-    <script>
-        // Define the list of localities
-        const localities = ['Locality1', 'Locality2', 'Locality3', 'Locality4'];
+        <div class="form-group">
+            <label for="Agency">Select Agency:</label>
+            <select id="Agency">
+                <option value="">Select an agency</option>
+            </select>
+        </div>
 
-        // Get the select element
-        const selectElement = document.getElementById('Locality');
+        <script>
+            // Define the list of localities, streets, and agencies
+            const localities = ['ABBOTSBURY', 'ABBOTSFORD', 'ACACIA GARDENS', 'ALEXANDRIA', 'ALFORDS POINT', 'ALLAMBIE HEIGHTS', 'ALLAWAH', 'ANNANDALE', 'ARNCLIFFE', 'ARTARMON', 'ASHBURY', 'ASHCROFT', 'ASHFIELD', 'ASQUITH', 'AUBURN', 'BALGOWLAH', 'BALGOWLAH HEIGHTS', 'BALMAIN', 'BALMAIN EAST', 'BANGOR', 'BANKSIA', 'BANKSMEADOW', 'BANKSTOWN', 'BANKSTOWN AERODROME', 'BARANGAROO', 'BARDEN RIDGE', 'BARDWELL VALLEY', 'BASS HILL', 'BAULKHAM HILLS', 'BEACON HILL', 'BEACONSFIELD', 'BEAUMONT HILLS', 'BEECROFT', 'BELFIELD', 'BELLA VISTA', 'BELLEVUE HILL', 'BELMORE', 'BELROSE', 'BERALA', 'BERKSHIRE PARK', 'BEVERLEY PARK', 'BEVERLY HILLS', 'BEXLEY', 'BEXLEY NORTH', 'BIDWILL', 'BIRCHGROVE', 'BLACKETT', 'BLACKTOWN', 'BLAKEHURST', 'BLAXLAND', 'BLIGH PARK', 'BONDI', 'BONDI BEACH', 'BONDI JUNCTION', 'BONNET BAY', 'BONNYRIGG', 'BONNYRIGG HEIGHTS', 'BOSSLEY PARK', 'BOTANY', 'BOX HILL', 'BREAKFAST POINT', 'BRIGHTON-LE-SANDS', 'BRONTE', 'BROOKVALE', 'BUNGARRIBEE', 'BURRANEER', 'BURWOOD', 'BURWOOD HEIGHTS', 'BUSBY', 'CABRAMATTA', 'CABRAMATTA WEST', 'CADDENS', 'CAMBRIDGE GARDENS', 'CAMBRIDGE PARK', 'CAMMERAY', 'CAMPERDOWN', 'CAMPSIE', 'CANADA BAY', 'CANLEY HEIGHTS', 'CANLEY VALE', 'CANTERBURY', 'CARINGBAH', 'CARINGBAH SOUTH', 'CARLINGFORD', 'CARLTON', 'CARRAMAR', 'CARSS PARK', 'CARTWRIGHT', 'CASTLE COVE', 'CASTLE HILL', 'CASTLECRAG', 'CASTLEREAGH', 'CASULA', 'CECIL HILLS', 'CENTENNIAL PARK', 'CHATSWOOD', 'CHATSWOOD WEST', 'CHELTENHAM', 'CHERRYBROOK', 'CHESTER HILL', 'CHIFLEY', 'CHIPPENDALE', 'CHIPPING NORTON', 'CHISWICK', 'CLAREMONT MEADOWS', 'CLEMTON PARK', 'CLONTARF', 'CLOVELLY', 'COLEBEE', 'COLLAROY', 'COLLAROY PLATEAU', 'COLYTON', 'COMO', 'CONCORD', 'CONCORD WEST', 'CONDELL PARK', 'CONNELLS POINT', 'CONSTITUTION HILL', 'COOGEE', 'CRANEBROOK', 'CREMORNE', 'CROMER', 'CROMER HEIGHTS', 'CRONULLA', 'CROWS NEST', 'CROYDON', 'CROYDON PARK', 'CURL CURL', 'DARLING POINT', 'DARLINGHURST', 'DARLINGTON', 'DAVIDSON', 'DEAN PARK', 'DEE WHY', 'DENISTONE', 'DENISTONE EAST', 'DENISTONE WEST', 'DHARRUK', 'DOLLS POINT', 'DOONSIDE', 'DOUBLE BAY', 'DOVER HEIGHTS', 'DRUMMOYNE', 'DULWICH HILL', 'DUNDAS', 'DUNDAS VALLEY', 'DURAL', 'EARLWOOD', 'EAST HILLS', 'EAST KILLARA', 'EAST LINDFIELD', 'EASTGARDENS', 'EASTLAKES', 'EASTWOOD', 'EDENSOR PARK', 'EDGECLIFF', 'EDMONDSON PARK', 'ELIZABETH BAY', 'ELIZABETH HILLS', 'EMERTON', 'EMU HEIGHTS', 'EMU PLAINS', 'ENFIELD', 'ENGADINE', 'ENMORE', 'EPPING', 'ERMINGTON', 'ERSKINEVILLE', 'FAIRFIELD', 'FAIRFIELD EAST', 'FAIRFIELD HEIGHTS', 'FAIRFIELD WEST', 'FAIRLIGHT', 'FIVE DOCK', 'FOREST LODGE', 'FORESTVILLE', 'FRENCHS FOREST', 'FRESHWATER', 'GABLES', 'GALSTON', 'GEORGES HALL', 'GIRRAWEEN', 'GLADESVILLE', 'GLEBE', 'GLENBROOK', 'GLENDENNING', 'GLENHAVEN', 'GLENMORE PARK', 'GLENORIE', 'GLENWOOD', 'GORDON', 'GRANTHAM FARM', 'GRANVILLE', 'GRAYS POINT', 'GREEN VALLEY', 'GREENACRE', 'GREENFIELD PARK', 'GREENWICH', 'GREYSTANES', 'GUILDFORD', 'GUILDFORD WEST', 'GYMEA', 'GYMEA BAY', 'HABERFIELD', 'HAMMONDVILLE', 'HARRIS PARK', 'HASSALL GROVE', 'HAYMARKET', 'HEATHCOTE', 'HEBERSHAM', 'HECKENBERG', 'HILLSDALE', 'HINCHINBROOK', 'HOLROYD', 'HOMEBUSH', 'HOMEBUSH WEST', 'HORNSBY', 'HORNSBY HEIGHTS', 'HUNTERS HILL', 'HUNTLEYS COVE', 'HURLSTONE PARK', 'HURSTVILLE', 'HURSTVILLE GROVE', 'ILLAWONG', 'JAMISONTOWN', 'JANNALI', 'JORDAN SPRINGS', 'KAREELA', 'KELLYVILLE', 'KELLYVILLE RIDGE', 'KENSINGTON', 'KENTHURST', 'KILLARA', 'KILLARNEY HEIGHTS', 'KINGS LANGLEY', 'KINGS PARK', 'KINGSFORD', 'KINGSGROVE', 'KINGSWOOD', 'KIRRAWEE', 'KOGARAH', 'KOGARAH BAY', 'KURNELL', 'LA PEROUSE', 'LAKEMBA', 'LALOR PARK', 'LANE COVE', 'LANE COVE NORTH', 'LANE COVE WEST', 'LANSVALE', 'LAVENDER BAY', 'LEICHHARDT', 'LETHBRIDGE PARK', 'LEWISHAM', 'LIBERTY GROVE', 'LIDCOMBE', 'LILLI PILLI', 'LILYFIELD', 'LINDFIELD', 'LITTLE BAY', 'LIVERPOOL', 'LLANDILO', 'LOFTUS', 'LONDONDERRY', 'LUGARNO', 'LURNEA', 'MACQUARIE PARK', 'MALABAR', 'MANLY', 'MANLY VALE', 'MARAYLYA', 'MARAYONG', 'MAROUBRA', 'MARRICKVILLE', 'MARSDEN PARK', 'MARSFIELD', 'MASCOT', 'MATRAVILLE', 'MAYS HILL', 'MCGRATHS HILL', 'MCMAHONS POINT', 'MEADOWBANK', 'MELONBA', 'MELROSE PARK', 'MENAI', 'MERRYLANDS', 'MERRYLANDS WEST', 'MIDDLETON GRANGE', 'MILLER', 'MILLERS POINT', 'MILPERRA', 'MINCHINBURY', 'MIRANDA', 'MONTEREY', 'MOOREBANK', 'MORTDALE', 'MORTLAKE', 'MOSMAN', 'MOUNT COLAH', 'MOUNT DRUITT', 'MOUNT PRITCHARD', 'NAREMBURN', 'NARRABEEN', 'NARRAWEENA', 'NARWEE', 'NEUTRAL BAY', 'NEWINGTON', 'NEWTOWN', 'NIRIMBA FIELDS', 'NORMANHURST', 'NORTH BALGOWLAH', 'NORTH BONDI', 'NORTH CURL CURL', 'NORTH EPPING', 'NORTH KELLYVILLE', 'NORTH MANLY', 'NORTH NARRABEEN', 'NORTH PARRAMATTA', 'NORTH ROCKS', 'NORTH RYDE', 'NORTH ST MARYS', 'NORTH STRATHFIELD', 'NORTH SYDNEY', 'NORTHBRIDGE', 'NORTHMEAD', 'NORWEST', 'OAKHURST', 'OAKVILLE', 'OATLANDS', 'OATLEY', 'OLD GUILDFORD', 'OLD TOONGABBIE', 'OXLEY PARK', 'OYSTER BAY', 'PADDINGTON', 'PADSTOW', 'PADSTOW HEIGHTS', 'PAGEWOOD', 'PANANIA', 'PARKLEA', 'PARRAMATTA', 'PEAKHURST', 'PEMULWUY', 'PENDLE HILL', 'PENNANT HILLS', 'PENRITH', 'PENSHURST', 'PETERSHAM', 'PICNIC POINT', 'PLEASURE POINT', 'PLUMPTON', 'POINT PIPER', 'PORT HACKING', 'POTTS POINT', 'PRAIRIEWOOD', 'PRESTONS', 'PROSPECT', 'PUNCHBOWL', 'PUTNEY', 'PYMBLE', 'PYRMONT', 'QUAKERS HILL', 'QUEENS PARK', 'QUEENSCLIFF', 'RAMSGATE', 'RAMSGATE BEACH', 'RANDWICK', 'REDFERN', 'REGENTS PARK', 'REVESBY', 'REVESBY HEIGHTS', 'RHODES', 'RICHMOND', 'RIVERSTONE', 'RIVERWOOD', 'ROCKDALE', 'RODD POINT', 'ROOTY HILL', 'ROPES CROSSING', 'ROSE BAY', 'ROSEBERY', 'ROSEHILL', 'ROSELANDS', 'ROSEVILLE', 'ROSEVILLE CHASE', 'ROUSE HILL', 'ROZELLE', 'RUSHCUTTERS BAY', 'RUSSELL LEA', 'RYDALMERE', 'RYDE', 'SADLEIR', 'SANDY POINT', 'SANS SOUCI', 'SCHOFIELDS', 'SEAFORTH', 'SEFTON', 'SEVEN HILLS', 'SILVERWATER', 'SMITHFIELD', 'SOUTH COOGEE', 'SOUTH GRANVILLE', 'SOUTH HURSTVILLE', 'SOUTH PENRITH', 'SOUTH WENTWORTHVILLE', 'SOUTH WINDSOR', 'ST', 'ST CLAIR', 'ST IVES', 'ST JOHNS PARK', 'ST LEONARDS', 'ST MARYS', 'ST PETERS', 'STANHOPE GARDENS', 'STANMORE', 'STRATHFIELD', 'STRATHFIELD SOUTH', 'SUMMER HILL', 'SURRY HILLS', 'SUTHERLAND', 'SYDENHAM', 'SYDNEY', 'SYDNEY OLYMPIC PARK', 'SYLVANIA', 'SYLVANIA WATERS', 'TALLAWONG', 'TAMARAMA', 'TAREN POINT', 'TELOPEA', 'TEMPE', 'TERREY HILLS', 'THE PONDS', 'THE ROCKS', 'THORNLEIGH', 'TOONGABBIE', 'TREGEAR', 'TURRAMURRA', 'TURRELLA', 'ULTIMO', 'VAUCLUSE', 'VILLAWOOD', 'VINEYARD', 'WAHROONGA', 'WAITARA', 'WAKELEY', 'WALSH BAY', 'WAREEMBA', 'WARRAWEE', 'WARWICK FARM', 'WATERLOO', 'WATSONS BAY', 'WATTLE GROVE', 'WAVERLEY', 'WAVERTON', 'WENTWORTH POINT', 'WENTWORTHVILLE', 'WERRINGTON', 'WERRINGTON COUNTY', 'WEST PENNANT HILLS', 'WEST PYMBLE', 'WEST RYDE', 'WESTLEIGH', 'WESTMEAD', 'WETHERILL PARK', 'WHALAN', 'WHEELER HEIGHTS', 'WILEY PARK', 'WILLMOT', 'WILLOUGHBY', 'WINSTON HILLS', 'WOLLI CREEK', 'WOLLSTONECRAFT', 'WOODCROFT', 'WOOLLAHRA', 'WOOLLOOMOOLOO', 'WOOLOOWARE', 'WOOLWICH', 'WORONORA', 'WORONORA HEIGHTS', 'YAGOONA', 'YARRAWARRAH', 'YENNORA', 'YOWIE BAY', 'ZETLAND'];
+            const agencies = ['Agency1', 'Agency2', 'Agency3', 'Agency4'];
 
-        // Populate the select element with options
-        localities.forEach(locality => {
-            const option = document.createElement('option');
-            option.value = locality.toLowerCase();
-            option.textContent = locality;
-            selectElement.appendChild(option);
-        });
-    </script>
+            // Function to populate a select element with options
+            function populateSelect(elementId, options) {
+                const selectElement = document.getElementById(elementId);
+                options.forEach(optionText => {
+                    const option = document.createElement('option');
+                    option.value = optionText.toLowerCase();
+                    option.textContent = optionText;
+                    selectElement.appendChild(option);
+                });
+            }
 
-        <button class="button" id="predictButton">Predict Price in AUD$ per week</button>
-        <div class="result" id="result"></div>
+            // Populate the select elements
+            populateSelect('Locality', localities);
+            populateSelect('Agency', agencies);
+
+            // Update the displayed range value
+            const inputArea = document.getElementById('inputArea');
+            const rangeValue = document.getElementById('rangeValue');
+
+            inputArea.addEventListener('input', () => {
+                rangeValue.textContent = inputArea.value === "0" ? "Not specified" : inputArea.value;
+                checkFields();
+            });
+
+            // Check if at least two other fields are filled besides the property type
+            function checkFields() {
+            const inputBedrooms = document.getElementById('inputBedrooms').value;
+            const inputBathrooms = document.getElementById('inputBathrooms').value;
+            const inputArea = document.getElementById('inputArea').value;
+            const propertyType = document.getElementById('propertyType').value;
+            const locality = document.getElementById('Locality').value;
+            const agency = document.getElementById('Agency').value;
+
+            let filledCount = 0;
+
+            if (inputBedrooms) filledCount++;
+            if (inputBathrooms) filledCount++;
+            if (inputArea && inputArea !== "0") filledCount++;
+            if (propertyType) filledCount++; // Property type must be selected
+            if (locality && locality !== "") filledCount++; // Check if not default option
+            if (agency && agency !== "") filledCount++; // Check if not default option
+
+            const predictButton = document.getElementById('predictButton');
+            predictButton.disabled = !(propertyType && filledCount >= 2);
+}
+
+            // Add event listeners to check the fields when they change
+            document.querySelectorAll('input, select').forEach(element => {
+                element.addEventListener('input', checkFields);
+            });
+
+            // Initial check to set the button state on load
+            checkFields();
+        </script>
+
+        <button class="button" id="predictButton" disabled>Predict Price (AUD$/wk)</button>
+        <div id="message" class="result"></div>
     </div>
     <script>
         document.getElementById('predictButton').addEventListener('click', async () => {
-            const inputData = document.getElementById('inputData').value;
-            const resultDiv = document.getElementById('result');
-            if (!inputData) {
-                alert('Please enter input data');
-                return;
-            }
-            resultDiv.textContent = 'Predicting...';
-            try {
-                const response = await fetch('/predict', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ input: inputData })
-                });
-                const result = await response.json();
-                resultDiv.textContent = `Prediction: ${result.prediction}`;
-            } catch (error) {
-                console.error('Error:', error);
-                resultDiv.textContent = 'An error occurred while making the prediction.';
-            }
+            const messageDiv = document.getElementById('message');
+
+            // Display a message as soon as the button is pressed
+            messageDiv.textContent = 'Request received';
         });
     </script>
 </body>
