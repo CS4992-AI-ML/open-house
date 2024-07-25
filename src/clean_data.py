@@ -3,7 +3,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from botocore.exceptions import NoCredentialsError, ClientError
 
-from s3 import upload_to_s3
+from upload_s3 import upload_to_s3
 from util import get_relative_month, extract_weekly_price
 
 # Load the .env file
