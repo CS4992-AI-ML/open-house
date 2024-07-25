@@ -31,7 +31,7 @@ If not, double click the version -> Specify Version -> 3.11 -> Wait for install 
 ## Step 4: Test Interpreter is setup
 
 ```angular2html
-python ./tests/test-version.py
+python ./tests/test_version.py
 ```
 
 ### Result should be something similar to this
@@ -62,7 +62,7 @@ Install [AWS CLI](https://aws.amazon.com/cli/) and install [boto3](https://pypi.
 
 Once you have done and logged in, run this:
 ```angular2html
-python ./tests/test-boto3.py
+python ./tests/test_boto3.py
 ```
 The output should look something like this:
 ```angular2html
@@ -72,5 +72,5 @@ Existing buckets:
 
 To see the sample S3 JSON run this:
 ```angular2html
-python ./tests/test-squid.py
+python ./tests/test_squid.py
 ```
