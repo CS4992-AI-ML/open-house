@@ -5,7 +5,7 @@ import pandas as pd
 from dotenv import load_dotenv
 from botocore.exceptions import NoCredentialsError, ClientError
 
-from s3 import upload_to_s3
+from upload_s3 import upload_to_s3
 from cleaning_util import get_relative_month, extract_weekly_price
 
 # Load the .env file
@@ -69,5 +69,3 @@ if confirmation_str.casefold() == "y".casefold():
         print("Upload Failed")
 else:
     print("Upload Cancelled")
-
-print(df["Agency_Name"].unique()[:500])
