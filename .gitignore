@@ -5,3 +5,4 @@ __pycache__/
 chalice_app/.chalice/deployments/
 chalice_app/.chalice/venv/
 chalice_app/.chalice/deployed/
+chalice_app/.chalice/policy.json
