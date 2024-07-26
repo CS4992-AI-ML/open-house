@@ -1,3 +1,7 @@
 data/*
 *.env
 .DS_Store
+__pycache__/
+dm-housing/.chalice/deployments/
+dm-housing/.chalice/venv/
+dm-housing/.chalice/deployed/
