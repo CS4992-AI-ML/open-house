@@ -95,44 +95,6 @@ models = response["Models"]
 for model in models:
     print(model["ModelName"])
 
-"""
-
-transformName = "batch-transform-7"
-
-# Create the transform job
-response = sagemaker_client.create_transform_job(
-    TransformJobName=transformName,
-    ModelName=model_name,
-    MaxConcurrentTransforms=1,
-    MaxPayloadInMB=6,
-    BatchStrategy="SingleRecord",
-    TransformOutput={
-        "S3OutputPath": output_s3_uri,
-        "Accept": "text/csv",
-    },
-    TransformInput={
-        "DataSource": {
-            "S3DataSource": {"S3DataType": "S3Prefix", "S3Uri": input_s3_uri}
-        },
-        "ContentType": "text/csv",
-        "SplitType": "Line",
-    },
-    TransformResources={"InstanceType": "ml.m5.large", "InstanceCount": 1},
-)
-
-print(f'Transform job started: {response["TransformJobArn"]}')
-
-while True:
-    response = sagemaker_client.describe_transform_job(TransformJobName=transformName)
-    status = response["TransformJobStatus"]
-    if status in ["Completed", "Failed", "Stopped"]:
-        print(f"Transform job ended with status: {status}")
-        break
-    print(f"Transform job is still in progress: {status}")
-    time.sleep(1)
-
-"""
-
 # Open the file and read lines
 with open("../data/lessThanAgencies.txt") as f:
     for line in f:
