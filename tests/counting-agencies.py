@@ -1,10 +1,9 @@
+import random
 import time
-
 import boto3
 import pandas as pd
-from botocore.exceptions import ClientError, NoCredentialsError
-import sagemaker
-from sagemaker.model import Model
+from botocore.exceptions import NoCredentialsError, ValidationError
+import matplotlib.pyplot as plt
 
 lessThanAgencies = {}
 greaterThanAgencies = {}
@@ -29,6 +28,7 @@ df = pd.read_csv(nameCSV)
 # Replace the contents of the specified columns with blank space
 df["Agency_Name"] = ""
 df["Agent"] = ""
+df.drop(columns=["Weekly_Price"], inplace=True)
 
 # Save the modified DataFrame to a new CSV file
 df.to_csv(name + "-noAgencies.csv", index=False)
@@ -77,6 +77,62 @@ if object_name.casefold() != "cancel.csv".casefold():
 else:
     print("Upload Cancelled")
 
+sagemaker_client = boto3.client("sagemaker")
+
+# Define your input and output locations in S3
+input_s3_uri = f"s3://{bucket_name}/{file_name}"
+output_s3_uri = f"s3://{bucket_name}/{file_name}-output"
+
+num_columns = len(df.columns)
+print(f"Number of columns: {num_columns}")
+
+# Define your model details
+model_name = "canvas-model-2024-07-25-00-01-31-123032"
+
+# List models
+response = sagemaker_client.list_models()
+models = response["Models"]
+for model in models:
+    print(model["ModelName"])
+
+"""
+
+transformName = "batch-transform-7"
+
+# Create the transform job
+response = sagemaker_client.create_transform_job(
+    TransformJobName=transformName,
+    ModelName=model_name,
+    MaxConcurrentTransforms=1,
+    MaxPayloadInMB=6,
+    BatchStrategy="SingleRecord",
+    TransformOutput={
+        "S3OutputPath": output_s3_uri,
+        "Accept": "text/csv",
+    },
+    TransformInput={
+        "DataSource": {
+            "S3DataSource": {"S3DataType": "S3Prefix", "S3Uri": input_s3_uri}
+        },
+        "ContentType": "text/csv",
+        "SplitType": "Line",
+    },
+    TransformResources={"InstanceType": "ml.m5.large", "InstanceCount": 1},
+)
+
+print(f'Transform job started: {response["TransformJobArn"]}')
+
+while True:
+    response = sagemaker_client.describe_transform_job(TransformJobName=transformName)
+    status = response["TransformJobStatus"]
+    if status in ["Completed", "Failed", "Stopped"]:
+        print(f"Transform job ended with status: {status}")
+        break
+    print(f"Transform job is still in progress: {status}")
+    time.sleep(1)
+
+"""
+
 # Open the file and read lines
 with open("../data/lessThanAgencies.txt") as f:
     for line in f:
@@ -118,8 +174,11 @@ for agency in all_agencies:
     greater_count = greaterThanAgencies.get(agency, 0)
     absolute_agencies[agency] = less_count - greater_count
 
-sorted_absoluteAgencies = sorted(
+sorted_absoluteAgenciesDescending = sorted(
     absolute_agencies.items(), key=lambda item: item[1], reverse=True
+)
+sorted_absoluteAgenciesAscending = sorted(
+    absolute_agencies.items(), key=lambda item: item[1], reverse=False
 )
 
 print(sorted_lessThanAgencies)
@@ -129,6 +188,54 @@ print("Length: " + str(len(greaterThanAgencies)))
 
 # Print the absolute_agencies dictionary
 print("These agencies typically value properties lower than the predicted price:")
-print(sorted_absoluteAgencies)
+print(sorted_absoluteAgenciesDescending)
 print("These agencies typically value properties higher than the predicted price:")
-print(sorted(absolute_agencies.items(), key=lambda item: item[1], reverse=False))
+print(sorted_absoluteAgenciesAscending)
+
+# x-coordinates of left sides of bars
+left = []
+# heights of bars
+height = []
+# labels for bars
+tick_label = []
+
+for i in range(0, 5):
+    left.append(i)
+    height.append(sorted_absoluteAgenciesAscending[i][1])
+    tick_label.append(sorted_absoluteAgenciesAscending[i][0].replace(" ", "\n"))
+
+# plotting a bar chart
+plt.bar(left, height, tick_label=tick_label, width=0.8, color=["blue"])
+
+# naming the x-axis
+plt.xlabel("Agency")
+# naming the y-axis
+plt.ylabel("Score")
+# plot title
+plt.title("Agencies that price under predicted")
+# function to show the plot
+plt.show()
+
+# x-coordinates of left sides of bars
+left = []
+# heights of bars
+height = []
+# labels for bars
+tick_label = []
+
+for i in range(0, 5):
+    left.append(i)
+    height.append(sorted_absoluteAgenciesDescending[i][1])
+    tick_label.append(sorted_absoluteAgenciesDescending[i][0].replace(" ", "\n"))
+
+# plotting a bar chart
+plt.bar(left, height, tick_label=tick_label, width=0.8, color=["blue"])
+
+# naming the x-axis
+plt.xlabel("Agency")
+# naming the y-axis
+plt.ylabel("Score")
+# plot title
+plt.title("Agencies that price over predicted")
+# function to show the plot
+plt.show()
