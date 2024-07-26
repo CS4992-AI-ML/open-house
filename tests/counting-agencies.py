@@ -15,7 +15,7 @@ s3 = boto3.client("s3")
 bucket_name = "team-houses-bucket"
 key = "maggie-3.csv"
 name = "housing-data"
-nameCSV = "housing-data.csv"
+nameCSV = "../data/housing-data.csv"
 
 # Download the file from S3
 s3.download_file(bucket_name, key, nameCSV)
@@ -31,7 +31,7 @@ df["Agent"] = ""
 df.drop(columns=["Weekly_Price"], inplace=True)
 
 # Save the modified DataFrame to a new CSV file
-df.to_csv(name + "-noAgencies.csv", index=False)
+df.to_csv("../data/" + name + "-noAgencies.csv", index=False)
 
 print(f"Modified file saved to {name}-noAgencies.csv")
 
