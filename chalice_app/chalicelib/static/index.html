@@ -82,10 +82,15 @@
       </div>
 
       <div class="form-group">
+            <label for="inputParking">Enter Number of Parking Spaces:</label>
+            <input type="number" id="inputParking" />
+        </div>
+
+      <div class="form-group">
         <label for="inputArea">Enter Area (square meters):</label>
         <div class="range-container">
           <input type="range" id="inputArea" min="100" max="4000" value="0" />
-          <div id="rangeValue" class="range-value">Not specified</div>
+          <div id="rangeValue" class="range-value">None</div>
         </div>
       </div>
 
@@ -111,6 +116,32 @@
           <option value="">Select an agency</option>
         </select>
       </div>
+
+      <div class="form-group">
+            <label for="Agent">Select Agent:</label>
+            <select id="Agent">
+                <option value="">Select an agent</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="Month">Select Listed Month:</label>
+            <select id="Month">
+                <option value="">Select listed month</option>
+                <option value="Jan">January</option>
+                <option value="Feb">February</option>
+                <option value="Mar">March</option>
+                <option value="Apr">April</option>
+                <option value="May">May</option>
+                <option value="Jun">June</option>
+                <option value="Jul">July</option>
+                <option value="Aug">August</option>
+                <option value="Sep">September</option>
+                <option value="Oct">October</option>
+                <option value="Nov">November</option>
+                <option value="Dec">December</option>
+            </select>
+        </div>
 
       <script>
         // Define the list of localities, streets, and agencies
@@ -2577,6 +2608,8 @@
           "Austcorp Realty Pty Limited - Sydney",
         ];
 
+        const agents = ['Natasha', 'Pietro', 'Wanda', 'Barton']
+
         // Function to populate a select element with options
         function populateSelect(elementId, options) {
           const selectElement = document.getElementById(elementId);
@@ -2591,6 +2624,7 @@
         // Populate the select elements
         populateSelect("Locality", localities);
         populateSelect("Agency", agencies);
+        populateSelect('Agent', agents);
 
         // Update the displayed range value
         const inputArea = document.getElementById("inputArea");
@@ -2598,29 +2632,34 @@
 
         inputArea.addEventListener("input", () => {
           rangeValue.textContent =
-            inputArea.value === "0" ? "Not specified" : inputArea.value;
+            inputArea.value === "0" ? "None" : inputArea.value;
           checkFields();
         });
 
         // Check if at least two other fields are filled besides the property type
         function checkFields() {
           const inputBedrooms = document.getElementById("inputBedrooms").value;
-          const inputBathrooms =
-            document.getElementById("inputBathrooms").value;
+          const inputBathrooms = document.getElementById("inputBathrooms").value;
+          const inputParking = document.getElementById('inputParking').value;
           const inputArea = document.getElementById("inputArea").value;
           const propertyType = document.getElementById("propertyType").value;
           const locality = document.getElementById("Locality").value;
           const agency = document.getElementById("Agency").value;
+          const month = document.getElementById('Month').value;
+          const agent = document.getElementById('Agent').value;
 
           let filledCount = 0;
 
           // Count filled fields
           if (inputBedrooms) filledCount++;
           if (inputBathrooms) filledCount++;
+          if (inputParking) filledCount++;
           if (propertyType) filledCount++;
           if (inputArea && inputArea !== "0") filledCount++;
           if (locality && locality !== "") filledCount++;
           if (agency && agency !== "") filledCount++;
+          if (month && month !== "") filledCount++;
+          if (agent && agent !== "") filledCount++;
 
           // Check if property type is selected and at least three fields are filled
           const predictButton = document.getElementById("predictButton");
