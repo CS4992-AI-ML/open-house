@@ -8,7 +8,7 @@ from chalicelib.predict_price import predict_price
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-app = Chalice(app_name="dm-housing")
+app = Chalice(app_name="chalice_app")
 sagemaker_runtime = boto3.client("sagemaker-runtime")
 SAGEMAKER_ENDPOINT_NAME = "dm-housing-endpoint"
 
