@@ -3,7 +3,10 @@ import os
 from chalice import Chalice, Response
 import logging
 import boto3
+
+from chalicelib.manifest_json import manifest_json
 from chalicelib.predict_price import predict_price
+import csv
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -21,6 +24,14 @@ def index():
         ).read(),
         headers={"Content-Type": "text/html"},
     )
+
+
+@app.route("/manifest")
+def get_info():
+    logger.info("Get info endpoint called")
+    response = manifest_json()
+    logger.info(f"Response from manifest_json: {response}")
+    return {"response": response}
 
 
 @app.route("/predict", methods=["POST"], content_types=["application/json"])
