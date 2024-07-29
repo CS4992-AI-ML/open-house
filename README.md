@@ -1,4 +1,6 @@
 # Welcome to Project Open House
+[Link to further background documentation](https://docs.google.com/document/d/1j7SKMtpVIPzhOkzZ7TffQCHxCKNeilz7gkUAR5KA22g/edit#heading=h.xdi7upsffmgs)
+[View our final presentation](https://www.canva.com/design/DAGMTOkhdDw/hfsjk6Ce7VtSLhtDtv2Nng/edit?utm_content=DAGMTOkhdDw&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ## Team
 - Diane
