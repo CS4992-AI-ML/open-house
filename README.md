@@ -115,3 +115,9 @@ To see the sample S3 JSON run this:
 ```angular2html
 python ./tests/test_squid.py
 ```
+
+## Explanation of our Files
+### - [clean_data.py](./readme-script/clean_data.md)
+### - [cleaning_utils.py](./readme-script/cleaning_utils.md)
+### - [data_imports.py](./readme-script/data_imports.md)
+### - [upload_s3.py](./readme-script/upload_s3.md)
