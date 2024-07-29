@@ -205,7 +205,7 @@ def generate_graph(data, colors, title):
     img_buffer.seek(0)  # Rewind the buffer to the beginning
     plt.close()  # Close the plot to free up memory
 
-    s3_file_path = title + ".png"
+    s3_file_path = (title + ".png").replace(" ", "_")
 
     # Upload the PNG image to S3
     s3.put_object(
@@ -218,8 +218,8 @@ def generate_graph(data, colors, title):
     print(f"Bar chart successfully uploaded to s3://{bucket_name}/{s3_file_path}")
 
 
-generate_graph(sorted_absoluteAgenciesAscending, "Blues", "Agencies that underprice")
-generate_graph(sorted_absoluteAgenciesDescending, "Reds", "Agencies that overprice")
+generate_graph(sorted_absoluteAgenciesAscending, "Blues", "Underpricing_Agencies")
+generate_graph(sorted_absoluteAgenciesDescending, "Reds", "Overpricing_Agencies")
 
 sorted_data = dict(
     sorted(differenceDict.items(), key=lambda item: item[1]), reverse=True
