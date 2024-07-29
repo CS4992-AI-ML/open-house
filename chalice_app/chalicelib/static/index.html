@@ -1,76 +1,217 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Open House Frontend</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        background-color: #f0f0f0;
-      }
-      .container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      .form-group {
-        margin-bottom: 15px;
-      }
-      .form-group label {
-        display: block;
-        margin-bottom: 5px;
-      }
-      .form-group input,
-      .form-group select {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-      }
-      .range-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .range-value {
-        width: 80px;
-        text-align: center;
-        padding: 8px;
-        background-color: #e9ecef;
-        border-radius: 4px;
-      }
-      .button {
-        padding: 10px 20px;
-        background-color: #007bff;
-        color: #fff;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-      }
-      .button:disabled {
-        background-color: #ccc;
-        cursor: not-allowed;
-      }
-      .result {
-        margin-top: 20px;
-        padding: 10px;
-        background-color: #e9ecef;
-        border-radius: 4px;
-      }
-    </style>
-  </head>
-  <body>
-    <div class="container">
-      <h1>Predict with SageMaker Model</h1>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Open House Frontend</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f7f9fc;
+      color: #333;
+    }
+    nav {
+      width: 100%;
+      background-color: #007bff;
+      color: white;
+      padding: 10px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li {
+      margin: 0 15px;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .container {
+      max-width: 800px;
+      margin: 50px auto 50px;
+      padding: 10px;
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+    .range-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .range-value {
+      width: 80px;
+      text-align: center;
+      padding: 8px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+    }
+    .button {
+      padding: 10px 20px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+    }
+    .project-description {
+      margin-bottom: 40px;
+      text-align: left;
+    }
+    .team-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .team-member {
+      flex: 0 0 100%;
+      display: flex;
+      align-items: center;
+    }
+    .team-member img {
+      border-radius: 50%;
+      width: 80px;
+      height: 80px;
+      object-fit: cover;
+      margin-right: 20px;
+    }
+    .team-member h3 {
+      margin: 0;
+      font-size: 1.2em;
+      font-weight: bold;
+    }
+    .team-member p {
+      margin: 0;
+      font-size: 1em;
+      color: #666;
+    }
+    .documentation-section {
+      margin-top: 20px;
+    }
+    .documentation-section h3 {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+    }
+    .documentation-section p {
+      margin: 0 0 10px 0;
+    }
+    .placeholder-graph {
+      width: 100%;
+      height: 200px;
+      background-color: #e9ecef;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #666;
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#team">Team Members</a></li>
+      <li><a href="#predict">Prediction Model</a></li>
+      <li><a href="#documentation">Documentation</a></li>
+    </ul>
+  </nav>
 
+  <div class="container" id="about">
+    <h2>About</h2>
+    <div class="project-description">
+      <p>Based on recent housing data we aim to provide insights on Sydney rental market pricing. We produced two main
+          deliverables, a list of agencies ranked by how much over or under the average market price and an application that
+          is able to predict the price based on user input.
+      </p>
+    </div>
+  </div>
+
+  <div class="container" id="team">
+    <h2>Meet the Team</h2>
+    <div class="team-section">
+      <div class="team-member">
+        <img src="../pictures/maggie_pic.jpg" alt="Maggie Estabrooks" />
+        <div>
+          <h3>Maggie Estabrooks</h3>
+          <p>Electrical and Computer Engineering at Northeastern University</p>
+        </div>
+      </div>
+      <div class="team-member">
+        <img src="../pictures/diane_pic.jpg" alt="Diane Grant" />
+        <div>
+          <h3>Diane Grant</h3>
+          <p>Computer Science and Political Science at Northeastern University</p>
+        </div>
+      </div>
+      <div class="team-member">
+        <img src="../pictures/maddie_pic.png" alt="Maddie Lebiedzinski" />
+        <div>
+          <h3>Maddie Lebiedzinski</h3>
+          <p>Computer Science and Design at Northeastern University</p>
+        </div>
+      </div>
+      <div class="team-member">
+        <img src="../pictures/spencer_pic.jpg" alt="Spencer Mendelsohn" />
+        <div>
+          <h3>Spencer Mendelsohn</h3>
+          <p>Computer Science with a concentration in Software at Northeastern University</p>
+        </div>
+      </div>
+      <div class="team-member">
+        <img src="../pictures/luis_pic.png" alt="Luis Sarmiento" />
+        <div>
+          <h3>Luis Sarmiento</h3>
+          <p>Computer Science and Game Development at Northeastern University</p>
+        </div>
+      </div>
+      <div class="team-member">
+        <img src="../pictures/owen_pic.jpg" alt="Owen Simpson" />
+        <div>
+          <h3>Owen Simpson</h3>
+          <p>Computer Science with a concentration in Software at Northeastern University</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container" id="predict">
+      <h1>Predict with SageMaker Model</h1>
       <div class="form-group">
         <label for="inputBedrooms">Enter Number of Bedrooms:</label>
         <input type="number" id="inputBedrooms" />
@@ -2679,6 +2820,20 @@
         Predict Price (AUD$/wk)
       </button>
       <div id="message" class="result"></div>
+      <div class="container" id="documentation">
+    <h2>Documentation</h2>
+    <div class="documentation-section">
+      <h3>Project Documentation</h3>
+      <p>For detailed project documentation, please visit <a href="https://docs.google.com/document/d/1j7SKMtpVIPzhOkzZ7TffQCHxCKNeilz7gkUAR5KA22g/edit#heading=h.xdi7upsffmgs" target="_blank">this link</a>.</p>
+      <div class="placeholder-graph">
+        Placeholder for Graph 1
+      </div>
+      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.</p>
+      <div class="placeholder-graph">
+        Placeholder for Graph 2
+      </div>
+      <p>Curabitur venenatis ut elit quis tempus, sit amet porttitor erat gravida.</p>
+    </div>
     </div>
     <script>
       document
