@@ -88,9 +88,9 @@
       </div>
 
       <div class="form-group">
-        <label for="inputArea">Enter Area (square meters):</label>
+        <label for="inputArea">Enter Floor Area (square meters):</label>
         <div class="range-container">
-          <input type="range" id="inputArea" min="100" max="4000" value="0" />
+          <input type="range" id="inputArea" min="25" max="750" value="150" />
           <div id="rangeValue" class="range-value">None</div>
         </div>
       </div>
@@ -184,7 +184,7 @@
           if (inputBathrooms) filledCount++;
           if (inputParking) filledCount++;
           if (propertyType) filledCount++;
-          if (inputArea && inputArea !== "0") filledCount++;
+          // if (inputArea && inputArea !== "0") filledCount++;
           if (locality && locality !== "") filledCount++;
           if (agency && agency !== "") filledCount++;
           if (month && month !== "") filledCount++;
@@ -193,7 +193,7 @@
           // Check if property type is selected and at least three fields are filled
           const predictButton = document.getElementById("predictButton");
           if (predictButton) {
-            predictButton.disabled = !(propertyType && filledCount >= 3);
+            predictButton.disabled = !propertyType || filledCount < 3;
           }
         }
 
@@ -259,7 +259,7 @@
                 propertyType: document.getElementById("propertyType").value,
                 bedrooms: document.getElementById("inputBedrooms").value,
                 bathrooms: document.getElementById("inputBathrooms").value,
-                area: document.getElementById("inputArea").value,
+                floorArea: document.getElementById("inputArea").value,
                 locality: document.getElementById("Locality").value,
                 agencyName: document.getElementById("Agency").value,
               }),

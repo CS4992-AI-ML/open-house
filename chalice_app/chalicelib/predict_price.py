@@ -1,6 +1,7 @@
 import json
 import boto3
 import pandas as pd
+import numpy as np
 
 
 def predict_price(body):
@@ -16,28 +17,28 @@ def predict_price(body):
     df = pd.DataFrame(
         [
             [
-                "",
-                "",
-                body.get("locality", ""),
-                "X" + raw_postcode if raw_postcode is not None else "",
+                np.nan,
+                np.nan,
+                body.get("locality", np.nan),
+                "X" + raw_postcode if raw_postcode is not None else np.nan,
                 "Current",
-                "",
+                np.nan,
                 body.get("monthListed", "Jun"),
                 body.get("daysListed", 0),
-                body.get("bedrooms", ""),
-                body.get("bathrooms", ""),
-                body.get("parkingSpaces", ""),
+                body.get("bedrooms", np.nan),
+                body.get("bathrooms", np.nan),
+                body.get("parkingSpaces", np.nan),
                 body.get("propertyType", "Unit"),
-                body.get("agencyName", ""),
-                body.get("agentName", ""),
-                body.get("area", 0),
-                0,
-                "",
-                "",
-                "",
-                "",
-                "",
-                "",
+                body.get("agencyName", np.nan),
+                body.get("agentName", np.nan),
+                body.get("landArea", np.nan),
+                body.get("floorArea", np.nan),
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
+                np.nan,
                 body.get("relativeMonth", 0),
             ]
         ]

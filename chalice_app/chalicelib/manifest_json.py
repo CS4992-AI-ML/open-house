@@ -30,7 +30,7 @@ def get_manifest_json():
         raise ValueError("DataFrame is empty or could not be retrieved.")
     else:
         logger.info(
-            f"CSV Data from S3 Bucket: {bucket_name}, File: {csv_file_key}\n{csv_data.head(20)}"
+            f"CSV Data from S3 Bucket: {bucket_name}, File: {csv_file_key}\n{csv_data.head(5)}"
         )
 
         unique_localities = sorted(csv_data["Locality"].astype(str).unique().tolist())

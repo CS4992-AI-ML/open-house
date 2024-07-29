@@ -36,7 +36,10 @@ def get_info():
         return Response(
             body={"error": f"Failed to retrieve manifest [{type(e).__name__}]"},
             status_code=500,
-            headers={"Content-Type": "application/json"},
+            headers={
+                "Content-Type": "application/json",
+                "Cache-Control": "max-age=600",
+            },
         )
     return response
 

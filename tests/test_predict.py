@@ -14,7 +14,8 @@ def predict_output():
             "propertyType": "House",
             "agencyName": "McGrath",
             "agentName": "Leasing Team",
-            "area": 500,
+            "landArea": 550,
+            "floorArea": 200,
             "relativeMonth": 1,
         }
     )
@@ -22,4 +23,4 @@ def predict_output():
 
 output = predict_output()
 print(output)
-assert 700 <= output <= 800, f"Output {output} is not within the expected range."
+assert 600 <= output <= 700, f"Output {output} is not within the expected range."
