@@ -1,55 +1,19 @@
 <!DOCTYPE html>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Open House Frontend</title>
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        height: 100vh;
-        background-color: #f0f0f0;
-      }
-      .container {
-        background-color: #fff;
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      }
-      .form-group {
-        margin-bottom: 15px;
-      }
-      .form-group label {
-        display: block;
-        margin-bottom: 5px;
-      }
-      .form-group input,
-      .form-group select {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-      }
-      .range-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      .range-value {
-        width: 80px;
-        text-align: center;
-        padding: 8px;
-        background-color: #e9ecef;
-        border-radius: 4px;
+      <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+     <style>
+      .highlighted:focus {
+        background-color: rgba(255, 0, 0, 0.1);
+        outline: 2px solid #DE4040FF;
       }
       .button {
         padding: 10px 20px;
-        background-color: #007bff;
+        background-color: #de4040;
         color: #fff;
         border: none;
         border-radius: 4px;
@@ -59,89 +23,255 @@
         background-color: #ccc;
         cursor: not-allowed;
       }
-      .result {
-        margin-top: 20px;
-        padding: 10px;
-        background-color: #e9ecef;
-        border-radius: 4px;
+      .box-left {
+      background-color: #de4040;
+      color: #ffffff;
+      width: 30%;
+      height: 100vh;
+      border: none;
+      overflow-y: auto;
+    }
+
+      .box-right {
+        background-color: #ffffff;
+        color: #ff0000;
+        border: none;
+        width: 70%;
+        overflow-y: auto;
+        height: 100%;
+        padding: 4% 7%;
       }
+
+      body {
+        background-color: #ffffff;
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+      }
+      .input-field {
+        background-color: #ffffff;
+        border: 1px solid #ff0000;
+      }
+      .input-title {
+        font-weight: bold;
+      }
+      .link {
+        text-decoration: underline;
+      }
+
+      .graph img {
+        height: 400px;
+        width: auto;
+      }
+
+     .team-section {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.team-member {
+  width: calc(50% - 0.5rem);
+  box-sizing: border-box;
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.team-member img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto;
+}
     </style>
+
   </head>
-  <body>
-    <div class="container">
-      <h1>Predict with SageMaker Model</h1>
+   <body class="flex items-center justify-center min-h-screen px-4 py-6 overflow-hidden">
+    <div class="flex w-full h-screen">
+      <!-- Left Box -->
+      <div class="box-left p-4 text-gray-100 flex flex-col justify-between">
+        <div>
+          <h1 class="text-2xl font-semibold mb-2">Weekly Housing Price Prediction With SageMaker Model</h1>
+          <p class="mb-4 text-xs">
+            Select housing specifications and predict! You are required to specify at least 3 fields in order to generate a prediction.
+          </p>
 
-      <div class="form-group">
-        <label for="inputBedrooms">Enter Number of Bedrooms:</label>
-        <input type="number" id="inputBedrooms" />
-      </div>
+          <hr>
+          <br>
 
-      <div class="form-group">
-        <label for="inputBathrooms">Enter Number of Bathrooms:</label>
-        <input type="number" id="inputBathrooms" />
-      </div>
-
-      <div class="form-group">
-            <label for="inputParking">Enter Number of Parking Spaces:</label>
-            <input type="number" id="inputParking" />
+            <h1 class="text-lg font-semibold mb-2">About</h1>
+          <p class="mb-4 text-xs">
+        Based on recent housing data we aim to provide insights on Sydney rental market pricing. We produced two main
+        deliverables, a list of agencies ranked by how much over or under the average market price and an application that
+        is able to predict the price based on user input.
+          </p>
         </div>
 
-      <div class="form-group">
-        <label for="inputArea">Enter Area (square meters):</label>
-        <div class="range-container">
-          <input type="range" id="inputArea" min="100" max="4000" value="0" />
-          <div id="rangeValue" class="range-value">None</div>
+        <!--documentation section-->
+              <div class="container" id="documentation">
+    <h1 class="text-lg font-semibold mb-2">Documentation</h1>
+    <div class="documentation-section">
+      <p class="mb-4 text-xs">For detailed project documentation, please visit <a class="link" href="https://docs.google.com/document/d/1j7SKMtpVIPzhOkzZ7TffQCHxCKNeilz7gkUAR5KA22g/edit#heading=h.xdi7upsffmgs" target="_blank">this link</a>.</p>
+      <div class="graph">
+        Underpricing Agencies
+        <img src="https://team-houses-bucket.s3.ap-southeast-2.amazonaws.com/Underpricing_Agencies.png?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMSJHMEUCIGZulj9EJ2HPjUfz%2FIk9Y8BS6DvV%2FAueDSMZajAiPQ7uAiEAkT6spxyXCPWVPY%2BQ92%2Bikn3Zn8LBT1a14RgZdzjLyg0qhQMIIhADGgw5MjM3MzI2NjA4MjgiDDFdzeHFddjgbwD%2FcSriAmKs0kqOvJ4K8AyggkfPAO9EBTYzLUoEZCa27Du9zVLyM4HugOHkhzfydh%2FO%2BikGsuWP8sQj5n9We8tUpPztKDRXAYcsIlCIQ9a8dJYchM8iayhjolzFSQf5jOMf8Xoy4s7zG6COxwXOXSVrkfPpPQeDLtv2Xe1eGNaWe18oybiuDWtf6xXMwPDNTh5UQ8UK2fzwlrOdmsPmnLRMRAiRO3btasmDxJs%2FgLPSbEVT6cfzHFI81PBpXbne3Z34AAMFmKPWhc%2FyfISIhKOFamVaiue1bCL3oi6h1WGA%2Bmr5fiZ6dLX33gQwz2iuIDgtVzMSFcyhsg3hN9fEPu36xsy4W9w46WD8XwnHT%2BGV1GIYwZUnV18KEfLsAv6GJu5CjjAy4JjdVAid0p6eOxBYrHNfXzeDZsZl0CmFEZXddHfX4DvlbiJdhM5e08h2YSxG03flk036Zts51YuWLTuHu29GSGMh%2BzC825u1BjqzAr26ATFFvUlxVuhMIEz3DxWrz4YZQMVsk48S%2FHAUbvgkeoWcyQ%2FXWnymB6nRTkGU2ZAunYeWUW3WUV5Zvdmpc%2B%2FjvWiWfmoKnv2wz%2Fxds2x2nXHiXHK9t2R5qmBf%2Fc1rzURZ4GF%2BrotCa%2FEylzNBsxPgoXsOIdhDmyMwaJUAVGuMvhOvUjWFYwLQYp63QFQ0Knjn0QjRj7aqx2ULchcmg3yCc%2BRAoO2fuoIXcwRoLVvB76Av4boc7Mviz9E2IMKzZqwvEoMFojAXgxmphBGeZI9c5Ie1kQ1waQ1wqFHH2%2BRqL9wZO0kwiDEMQ6DT8gRNirBUXcZQUpCCzpOu7qzw1txMOrs%2FRjiB2D3Mipz135vH6M0VTGnoK4UU2z0xg2XacmsqqJlg%2BLqcZf81uD2wqCQO7Kg%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240729T041052Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIA5OEWB2JOO73ZMOMY%2F20240729%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=2cd132d4877448cd67cc65e2edafd3afd7ea152c85c60872a7d0d30261d08181">
+      </div>
+      <p class="mb-4 text-xs">Ranking of the top 5 agencies that list houses below their average predicted value in Sydney.</p>
+      <div class="graph">
+        Overpricing Agencies
+        <img src="https://team-houses-bucket.s3.ap-southeast-2.amazonaws.com/Overpricing_Agencies.png?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMSJHMEUCIGZulj9EJ2HPjUfz%2FIk9Y8BS6DvV%2FAueDSMZajAiPQ7uAiEAkT6spxyXCPWVPY%2BQ92%2Bikn3Zn8LBT1a14RgZdzjLyg0qhQMIIhADGgw5MjM3MzI2NjA4MjgiDDFdzeHFddjgbwD%2FcSriAmKs0kqOvJ4K8AyggkfPAO9EBTYzLUoEZCa27Du9zVLyM4HugOHkhzfydh%2FO%2BikGsuWP8sQj5n9We8tUpPztKDRXAYcsIlCIQ9a8dJYchM8iayhjolzFSQf5jOMf8Xoy4s7zG6COxwXOXSVrkfPpPQeDLtv2Xe1eGNaWe18oybiuDWtf6xXMwPDNTh5UQ8UK2fzwlrOdmsPmnLRMRAiRO3btasmDxJs%2FgLPSbEVT6cfzHFI81PBpXbne3Z34AAMFmKPWhc%2FyfISIhKOFamVaiue1bCL3oi6h1WGA%2Bmr5fiZ6dLX33gQwz2iuIDgtVzMSFcyhsg3hN9fEPu36xsy4W9w46WD8XwnHT%2BGV1GIYwZUnV18KEfLsAv6GJu5CjjAy4JjdVAid0p6eOxBYrHNfXzeDZsZl0CmFEZXddHfX4DvlbiJdhM5e08h2YSxG03flk036Zts51YuWLTuHu29GSGMh%2BzC825u1BjqzAr26ATFFvUlxVuhMIEz3DxWrz4YZQMVsk48S%2FHAUbvgkeoWcyQ%2FXWnymB6nRTkGU2ZAunYeWUW3WUV5Zvdmpc%2B%2FjvWiWfmoKnv2wz%2Fxds2x2nXHiXHK9t2R5qmBf%2Fc1rzURZ4GF%2BrotCa%2FEylzNBsxPgoXsOIdhDmyMwaJUAVGuMvhOvUjWFYwLQYp63QFQ0Knjn0QjRj7aqx2ULchcmg3yCc%2BRAoO2fuoIXcwRoLVvB76Av4boc7Mviz9E2IMKzZqwvEoMFojAXgxmphBGeZI9c5Ie1kQ1waQ1wqFHH2%2BRqL9wZO0kwiDEMQ6DT8gRNirBUXcZQUpCCzpOu7qzw1txMOrs%2FRjiB2D3Mipz135vH6M0VTGnoK4UU2z0xg2XacmsqqJlg%2BLqcZf81uD2wqCQO7Kg%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240729T041137Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIA5OEWB2JOO73ZMOMY%2F20240729%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=e6930b3271476eee76c41c549114afac61c034c53c58bb595b1f2bba697ddfba">
+      </div>
+
+      <p class="mb-4 text-xs">Ranking of the top 5 agencies that list houses above their average predicted value in Sydney.</p>
+    </div>
+    </div>
+
+<!-- Team Section -->
+      <div class="container" id="team">
+        <h1 class="text-lg font-semibold mb-2">Meet the Team</h1>
+        <div class="team-section">
+          <div class="team-member">
+            <img src="https://team-houses-bucket.s3.ap-southeast-2.amazonaws.com/pictures/maggie_pic.jpg?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMSJHMEUCIGZulj9EJ2HPjUfz%2FIk9Y8BS6DvV%2FAueDSMZajAiPQ7uAiEAkT6spxyXCPWVPY%2BQ92%2Bikn3Zn8LBT1a14RgZdzjLyg0qhQMIIhADGgw5MjM3MzI2NjA4MjgiDDFdzeHFddjgbwD%2FcSriAmKs0kqOvJ4K8AyggkfPAO9EBTYzLUoEZCa27Du9zVLyM4HugOHkhzfydh%2FO%2BikGsuWP8sQj5n9We8tUpPztKDRXAYcsIlCIQ9a8dJYchM8iayhjolzFSQf5jOMf8Xoy4s7zG6COxwXOXSVrkfPpPQeDLtv2Xe1eGNaWe18oybiuDWtf6xXMwPDNTh5UQ8UK2fzwlrOdmsPmnLRMRAiRO3btasmDxJs%2FgLPSbEVT6cfzHFI81PBpXbne3Z34AAMFmKPWhc%2FyfISIhKOFamVaiue1bCL3oi6h1WGA%2Bmr5fiZ6dLX33gQwz2iuIDgtVzMSFcyhsg3hN9fEPu36xsy4W9w46WD8XwnHT%2BGV1GIYwZUnV18KEfLsAv6GJu5CjjAy4JjdVAid0p6eOxBYrHNfXzeDZsZl0CmFEZXddHfX4DvlbiJdhM5e08h2YSxG03flk036Zts51YuWLTuHu29GSGMh%2BzC825u1BjqzAr26ATFFvUlxVuhMIEz3DxWrz4YZQMVsk48S%2FHAUbvgkeoWcyQ%2FXWnymB6nRTkGU2ZAunYeWUW3WUV5Zvdmpc%2B%2FjvWiWfmoKnv2wz%2Fxds2x2nXHiXHK9t2R5qmBf%2Fc1rzURZ4GF%2BrotCa%2FEylzNBsxPgoXsOIdhDmyMwaJUAVGuMvhOvUjWFYwLQYp63QFQ0Knjn0QjRj7aqx2ULchcmg3yCc%2BRAoO2fuoIXcwRoLVvB76Av4boc7Mviz9E2IMKzZqwvEoMFojAXgxmphBGeZI9c5Ie1kQ1waQ1wqFHH2%2BRqL9wZO0kwiDEMQ6DT8gRNirBUXcZQUpCCzpOu7qzw1txMOrs%2FRjiB2D3Mipz135vH6M0VTGnoK4UU2z0xg2XacmsqqJlg%2BLqcZf81uD2wqCQO7Kg%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240729T025545Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIA5OEWB2JOO73ZMOMY%2F20240729%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=d168c06ca8494aef8b8bb7a4e5e23de724c831c774ada1956a4e6450a3a92990" alt="Maggie Estabrooks" />
+            <div>
+              <h3>Maggie Estabrooks</h3>
+              <p class="mb-4 text-xs">
+                 Electrical and Computer Engineering at Northeastern University </p>
+            </div>
+          </div>
+          <div class="team-member">
+            <img src="https://team-houses-bucket.s3.ap-southeast-2.amazonaws.com/pictures/diane_pic.jpg?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMSJHMEUCIGZulj9EJ2HPjUfz%2FIk9Y8BS6DvV%2FAueDSMZajAiPQ7uAiEAkT6spxyXCPWVPY%2BQ92%2Bikn3Zn8LBT1a14RgZdzjLyg0qhQMIIhADGgw5MjM3MzI2NjA4MjgiDDFdzeHFddjgbwD%2FcSriAmKs0kqOvJ4K8AyggkfPAO9EBTYzLUoEZCa27Du9zVLyM4HugOHkhzfydh%2FO%2BikGsuWP8sQj5n9We8tUpPztKDRXAYcsIlCIQ9a8dJYchM8iayhjolzFSQf5jOMf8Xoy4s7zG6COxwXOXSVrkfPpPQeDLtv2Xe1eGNaWe18oybiuDWtf6xXMwPDNTh5UQ8UK2fzwlrOdmsPmnLRMRAiRO3btasmDxJs%2FgLPSbEVT6cfzHFI81PBpXbne3Z34AAMFmKPWhc%2FyfISIhKOFamVaiue1bCL3oi6h1WGA%2Bmr5fiZ6dLX33gQwz2iuIDgtVzMSFcyhsg3hN9fEPu36xsy4W9w46WD8XwnHT%2BGV1GIYwZUnV18KEfLsAv6GJu5CjjAy4JjdVAid0p6eOxBYrHNfXzeDZsZl0CmFEZXddHfX4DvlbiJdhM5e08h2YSxG03flk036Zts51YuWLTuHu29GSGMh%2BzC825u1BjqzAr26ATFFvUlxVuhMIEz3DxWrz4YZQMVsk48S%2FHAUbvgkeoWcyQ%2FXWnymB6nRTkGU2ZAunYeWUW3WUV5Zvdmpc%2B%2FjvWiWfmoKnv2wz%2Fxds2x2nXHiXHK9t2R5qmBf%2Fc1rzURZ4GF%2BrotCa%2FEylzNBsxPgoXsOIdhDmyMwaJUAVGuMvhOvUjWFYwLQYp63QFQ0Knjn0QjRj7aqx2ULchcmg3yCc%2BRAoO2fuoIXcwRoLVvB76Av4boc7Mviz9E2IMKzZqwvEoMFojAXgxmphBGeZI9c5Ie1kQ1waQ1wqFHH2%2BRqL9wZO0kwiDEMQ6DT8gRNirBUXcZQUpCCzpOu7qzw1txMOrs%2FRjiB2D3Mipz135vH6M0VTGnoK4UU2z0xg2XacmsqqJlg%2BLqcZf81uD2wqCQO7Kg%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240729T025433Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIA5OEWB2JOO73ZMOMY%2F20240729%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=1226a4188632d9a157a16dd3e332a5d8ea9eb67f52cdbcd2cf072b1789d53b9e" alt="Diane Grant" />
+            <div>
+              <h3>Diane Grant</h3>
+              <p class="mb-4 text-xs">Computer Science and Political Science at Northeastern University</p>
+            </div>
+          </div>
+          <div class="team-member">
+            <img src="https://team-houses-bucket.s3.ap-southeast-2.amazonaws.com/pictures/maddie_pic.jpg?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMSJHMEUCIGZulj9EJ2HPjUfz%2FIk9Y8BS6DvV%2FAueDSMZajAiPQ7uAiEAkT6spxyXCPWVPY%2BQ92%2Bikn3Zn8LBT1a14RgZdzjLyg0qhQMIIhADGgw5MjM3MzI2NjA4MjgiDDFdzeHFddjgbwD%2FcSriAmKs0kqOvJ4K8AyggkfPAO9EBTYzLUoEZCa27Du9zVLyM4HugOHkhzfydh%2FO%2BikGsuWP8sQj5n9We8tUpPztKDRXAYcsIlCIQ9a8dJYchM8iayhjolzFSQf5jOMf8Xoy4s7zG6COxwXOXSVrkfPpPQeDLtv2Xe1eGNaWe18oybiuDWtf6xXMwPDNTh5UQ8UK2fzwlrOdmsPmnLRMRAiRO3btasmDxJs%2FgLPSbEVT6cfzHFI81PBpXbne3Z34AAMFmKPWhc%2FyfISIhKOFamVaiue1bCL3oi6h1WGA%2Bmr5fiZ6dLX33gQwz2iuIDgtVzMSFcyhsg3hN9fEPu36xsy4W9w46WD8XwnHT%2BGV1GIYwZUnV18KEfLsAv6GJu5CjjAy4JjdVAid0p6eOxBYrHNfXzeDZsZl0CmFEZXddHfX4DvlbiJdhM5e08h2YSxG03flk036Zts51YuWLTuHu29GSGMh%2BzC825u1BjqzAr26ATFFvUlxVuhMIEz3DxWrz4YZQMVsk48S%2FHAUbvgkeoWcyQ%2FXWnymB6nRTkGU2ZAunYeWUW3WUV5Zvdmpc%2B%2FjvWiWfmoKnv2wz%2Fxds2x2nXHiXHK9t2R5qmBf%2Fc1rzURZ4GF%2BrotCa%2FEylzNBsxPgoXsOIdhDmyMwaJUAVGuMvhOvUjWFYwLQYp63QFQ0Knjn0QjRj7aqx2ULchcmg3yCc%2BRAoO2fuoIXcwRoLVvB76Av4boc7Mviz9E2IMKzZqwvEoMFojAXgxmphBGeZI9c5Ie1kQ1waQ1wqFHH2%2BRqL9wZO0kwiDEMQ6DT8gRNirBUXcZQUpCCzpOu7qzw1txMOrs%2FRjiB2D3Mipz135vH6M0VTGnoK4UU2z0xg2XacmsqqJlg%2BLqcZf81uD2wqCQO7Kg%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240729T041956Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIA5OEWB2JOO73ZMOMY%2F20240729%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=adc80463debdb38967cd0494743a9b7a8a984596a10c5bf6b737bf62c1a77cf6">
+            <div>
+              <h3>Maddie Lebiedzinski</h3>
+              <p class="mb-4 text-xs">Computer Science and Design at Northeastern University</p>
+            </div>
+          </div>
+          <div class="team-member">
+            <img src="https://team-houses-bucket.s3.ap-southeast-2.amazonaws.com/pictures/spencer_pic.jpg?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMSJHMEUCIGZulj9EJ2HPjUfz%2FIk9Y8BS6DvV%2FAueDSMZajAiPQ7uAiEAkT6spxyXCPWVPY%2BQ92%2Bikn3Zn8LBT1a14RgZdzjLyg0qhQMIIhADGgw5MjM3MzI2NjA4MjgiDDFdzeHFddjgbwD%2FcSriAmKs0kqOvJ4K8AyggkfPAO9EBTYzLUoEZCa27Du9zVLyM4HugOHkhzfydh%2FO%2BikGsuWP8sQj5n9We8tUpPztKDRXAYcsIlCIQ9a8dJYchM8iayhjolzFSQf5jOMf8Xoy4s7zG6COxwXOXSVrkfPpPQeDLtv2Xe1eGNaWe18oybiuDWtf6xXMwPDNTh5UQ8UK2fzwlrOdmsPmnLRMRAiRO3btasmDxJs%2FgLPSbEVT6cfzHFI81PBpXbne3Z34AAMFmKPWhc%2FyfISIhKOFamVaiue1bCL3oi6h1WGA%2Bmr5fiZ6dLX33gQwz2iuIDgtVzMSFcyhsg3hN9fEPu36xsy4W9w46WD8XwnHT%2BGV1GIYwZUnV18KEfLsAv6GJu5CjjAy4JjdVAid0p6eOxBYrHNfXzeDZsZl0CmFEZXddHfX4DvlbiJdhM5e08h2YSxG03flk036Zts51YuWLTuHu29GSGMh%2BzC825u1BjqzAr26ATFFvUlxVuhMIEz3DxWrz4YZQMVsk48S%2FHAUbvgkeoWcyQ%2FXWnymB6nRTkGU2ZAunYeWUW3WUV5Zvdmpc%2B%2FjvWiWfmoKnv2wz%2Fxds2x2nXHiXHK9t2R5qmBf%2Fc1rzURZ4GF%2BrotCa%2FEylzNBsxPgoXsOIdhDmyMwaJUAVGuMvhOvUjWFYwLQYp63QFQ0Knjn0QjRj7aqx2ULchcmg3yCc%2BRAoO2fuoIXcwRoLVvB76Av4boc7Mviz9E2IMKzZqwvEoMFojAXgxmphBGeZI9c5Ie1kQ1waQ1wqFHH2%2BRqL9wZO0kwiDEMQ6DT8gRNirBUXcZQUpCCzpOu7qzw1txMOrs%2FRjiB2D3Mipz135vH6M0VTGnoK4UU2z0xg2XacmsqqJlg%2BLqcZf81uD2wqCQO7Kg%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240729T025606Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIA5OEWB2JOO73ZMOMY%2F20240729%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=ac63e91762b6127f04ca1318cd41c48a03cba5460c5283e2e1ba11b0fd6a171f" alt="Spencer Mendelsohn" />
+            <div>
+              <h3>Spencer Mendelsohn</h3>
+              <p class="mb-4 text-xs">Computer Science with a concentration in Software at Northeastern University</p>
+            </div>
+          </div>
+          <div class="team-member">
+            <img src="https://team-houses-bucket.s3.ap-southeast-2.amazonaws.com/pictures/luis_pic.png?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMSJHMEUCIGZulj9EJ2HPjUfz%2FIk9Y8BS6DvV%2FAueDSMZajAiPQ7uAiEAkT6spxyXCPWVPY%2BQ92%2Bikn3Zn8LBT1a14RgZdzjLyg0qhQMIIhADGgw5MjM3MzI2NjA4MjgiDDFdzeHFddjgbwD%2FcSriAmKs0kqOvJ4K8AyggkfPAO9EBTYzLUoEZCa27Du9zVLyM4HugOHkhzfydh%2FO%2BikGsuWP8sQj5n9We8tUpPztKDRXAYcsIlCIQ9a8dJYchM8iayhjolzFSQf5jOMf8Xoy4s7zG6COxwXOXSVrkfPpPQeDLtv2Xe1eGNaWe18oybiuDWtf6xXMwPDNTh5UQ8UK2fzwlrOdmsPmnLRMRAiRO3btasmDxJs%2FgLPSbEVT6cfzHFI81PBpXbne3Z34AAMFmKPWhc%2FyfISIhKOFamVaiue1bCL3oi6h1WGA%2Bmr5fiZ6dLX33gQwz2iuIDgtVzMSFcyhsg3hN9fEPu36xsy4W9w46WD8XwnHT%2BGV1GIYwZUnV18KEfLsAv6GJu5CjjAy4JjdVAid0p6eOxBYrHNfXzeDZsZl0CmFEZXddHfX4DvlbiJdhM5e08h2YSxG03flk036Zts51YuWLTuHu29GSGMh%2BzC825u1BjqzAr26ATFFvUlxVuhMIEz3DxWrz4YZQMVsk48S%2FHAUbvgkeoWcyQ%2FXWnymB6nRTkGU2ZAunYeWUW3WUV5Zvdmpc%2B%2FjvWiWfmoKnv2wz%2Fxds2x2nXHiXHK9t2R5qmBf%2Fc1rzURZ4GF%2BrotCa%2FEylzNBsxPgoXsOIdhDmyMwaJUAVGuMvhOvUjWFYwLQYp63QFQ0Knjn0QjRj7aqx2ULchcmg3yCc%2BRAoO2fuoIXcwRoLVvB76Av4boc7Mviz9E2IMKzZqwvEoMFojAXgxmphBGeZI9c5Ie1kQ1waQ1wqFHH2%2BRqL9wZO0kwiDEMQ6DT8gRNirBUXcZQUpCCzpOu7qzw1txMOrs%2FRjiB2D3Mipz135vH6M0VTGnoK4UU2z0xg2XacmsqqJlg%2BLqcZf81uD2wqCQO7Kg%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240729T025638Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIA5OEWB2JOO73ZMOMY%2F20240729%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=437ad06378da5a7e822e0f1381f3b24f0b2d1e385cb3a724a6ef486a8c4d8de0" alt="Luis Sarmiento" />
+            <div>
+              <h3>Luis Sarmiento</h3>
+              <p class="mb-4 text-xs">Computer Science and Game Development at Northeastern University</>
+            </div>
+          </div>
+          <div class="team-member">
+            <img src="https://team-houses-bucket.s3.ap-southeast-2.amazonaws.com/pictures/owen_pic.jpg?response-content-disposition=inline&X-Amz-Security-Token=IQoJb3JpZ2luX2VjEDoaCXVzLWVhc3QtMSJHMEUCIGZulj9EJ2HPjUfz%2FIk9Y8BS6DvV%2FAueDSMZajAiPQ7uAiEAkT6spxyXCPWVPY%2BQ92%2Bikn3Zn8LBT1a14RgZdzjLyg0qhQMIIhADGgw5MjM3MzI2NjA4MjgiDDFdzeHFddjgbwD%2FcSriAmKs0kqOvJ4K8AyggkfPAO9EBTYzLUoEZCa27Du9zVLyM4HugOHkhzfydh%2FO%2BikGsuWP8sQj5n9We8tUpPztKDRXAYcsIlCIQ9a8dJYchM8iayhjolzFSQf5jOMf8Xoy4s7zG6COxwXOXSVrkfPpPQeDLtv2Xe1eGNaWe18oybiuDWtf6xXMwPDNTh5UQ8UK2fzwlrOdmsPmnLRMRAiRO3btasmDxJs%2FgLPSbEVT6cfzHFI81PBpXbne3Z34AAMFmKPWhc%2FyfISIhKOFamVaiue1bCL3oi6h1WGA%2Bmr5fiZ6dLX33gQwz2iuIDgtVzMSFcyhsg3hN9fEPu36xsy4W9w46WD8XwnHT%2BGV1GIYwZUnV18KEfLsAv6GJu5CjjAy4JjdVAid0p6eOxBYrHNfXzeDZsZl0CmFEZXddHfX4DvlbiJdhM5e08h2YSxG03flk036Zts51YuWLTuHu29GSGMh%2BzC825u1BjqzAr26ATFFvUlxVuhMIEz3DxWrz4YZQMVsk48S%2FHAUbvgkeoWcyQ%2FXWnymB6nRTkGU2ZAunYeWUW3WUV5Zvdmpc%2B%2FjvWiWfmoKnv2wz%2Fxds2x2nXHiXHK9t2R5qmBf%2Fc1rzURZ4GF%2BrotCa%2FEylzNBsxPgoXsOIdhDmyMwaJUAVGuMvhOvUjWFYwLQYp63QFQ0Knjn0QjRj7aqx2ULchcmg3yCc%2BRAoO2fuoIXcwRoLVvB76Av4boc7Mviz9E2IMKzZqwvEoMFojAXgxmphBGeZI9c5Ie1kQ1waQ1wqFHH2%2BRqL9wZO0kwiDEMQ6DT8gRNirBUXcZQUpCCzpOu7qzw1txMOrs%2FRjiB2D3Mipz135vH6M0VTGnoK4UU2z0xg2XacmsqqJlg%2BLqcZf81uD2wqCQO7Kg%3D&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Date=20240729T025623Z&X-Amz-SignedHeaders=host&X-Amz-Expires=43200&X-Amz-Credential=ASIA5OEWB2JOO73ZMOMY%2F20240729%2Fap-southeast-2%2Fs3%2Faws4_request&X-Amz-Signature=b81f53540af7e8fdff82c8fd4c621fbbd3a775ca06a2536fcbf54a5da3dca7d5" alt="Owen Simpson" />
+            <div>
+              <h3>Owen Simpson</h3>
+              <p class="mb-4 text-xs">Computer Science with a concentration in Software at Northeastern University</p>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="form-group">
-        <label for="propertyType">Select Property Type:</label>
-        <select id="propertyType" required>
+  </div>
+
+      <!-- Right Box -->
+      <div class="box-right flex flex-col justify-between">
+        <div class="space-y-6"> <!-- Increased vertical spacing -->
+          <div class="flex mb-6 space-x-2"> <!-- Increased horizontal spacing -->
+            <div class="flex-1">
+              <label for="inputBedrooms" class="block mb-1 input-title text-xs">Enter Number of Bedrooms:</label>
+              <input type="number" id="inputBedrooms" class="w-full input-field p-2 rounded highlighted text-xs" />
+            </div>
+            <div class="flex-1">
+              <label for="inputBathrooms" class="block mb-1 input-title text-xs">Enter Number of Bathrooms:</label>
+              <input type="number" id="inputBathrooms" class="w-full input-field p-2 rounded highlighted text-xs" />
+            </div>
+          </div>
+
+          <div class="flex mb-6 space-x-2">
+            <div class="flex-1">
+              <label for="inputParking" class="block mb-1 input-title text-xs">Enter Number of Parking Spaces:</label>
+              <input type="number" id="inputParking" class="w-full input-field p-2 rounded highlighted text-xs" />
+            </div>
+          </div>
+
+          <div class="mb-6">
+             <div class="flex mb-6 space-x-2">
+            <div class="flex-1">
+            <label for="inputArea" class="block mb-1 input-title text-xs">Enter Area:</label>
+              <input type="range" id="inputArea" min="25" max="750" class="w-full input-field p-2 rounded highlighted text-xs" />
+            <div class="text-xs mt-1">Value: <span id="rangeValue">0</span> square meters</div>
+          </div>
+               </div>
+
+
+           <div class="mb-6">
+             <div class="flex-1">
+        <label for="propertyType" class="block mb-1 input-title text-xs">* Select Property Type:</label>
+        <select id="propertyType" class="w-full input-field p-2 rounded highlighted text-xs" required>
           <option value="">Select a property type</option>
           <option value="Unit">Unit</option>
           <option value="House">House</option>
         </select>
-      </div>
+               </div>
+             </div>
 
-      <div class="form-group">
-        <label for="Locality">Select Locality:</label>
-        <select id="Locality">
-          <option value="">Select a locality</option>
-        </select>
-      </div>
+          <div class="mb-6"> <!-- Increased vertical spacing -->
+            <label for="Locality" class="block mb-1 input-title text-xs">Select Locality:</label>
+            <select id="Locality" class="w-full input-field p-2 rounded highlighted text-xs">
+              <option value="">Select a locality</option>
+            </select>
+          </div>
 
-      <div class="form-group">
-        <label for="Agency">Select Agency:</label>
-        <select id="Agency">
-          <option value="">Select an agency</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-            <label for="Agent">Select Agent:</label>
-            <select id="Agent">
+          <div class="flex mb-6 space-x-2"> <!-- Increased horizontal spacing -->
+            <div class="flex-1">
+              <label for="Agency" class="block mb-1 input-title text-xs">Select Agency:</label>
+              <select id="Agency" class="w-full input-field p-2 rounded highlighted text-xs">
+                <option value="">Select an agency</option>
+              </select>
+            </div>
+            <div class="flex-1">
+              <label for="Agent" class="block mb-1 input-title text-xs">Select Agent:</label>
+              <select id="Agent" class="w-full input-field p-2 rounded highlighted text-xs">
                 <option value="">Select an agent</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-6"> <!-- Increased vertical spacing -->
+            <label for="Month" class="block mb-1 input-title text-xs">Select Listed Month:</label>
+            <select id="Month" class="w-full input-field p-2 rounded highlighted text-xs">
+              <option value="">Select listed month</option>
+              <option value="Jan">January</option>
+              <option value="Feb">February</option>
+              <option value="Mar">March</option>
+              <option value="Apr">April</option>
+              <option value="May">May</option>
+              <option value="Jun">June</option>
+              <option value="Jul">July</option>
+              <option value="Aug">August</option>
+              <option value="Sep">September</option>
+              <option value="Oct">October</option>
+              <option value="Nov">November</option>
+              <option value="Dec">December</option>
             </select>
+          </div>
         </div>
 
-        <div class="form-group">
-            <label for="Month">Select Listed Month:</label>
-            <select id="Month">
-                <option value="">Select listed month</option>
-                <option value="Jan">January</option>
-                <option value="Feb">February</option>
-                <option value="Mar">March</option>
-                <option value="Apr">April</option>
-                <option value="May">May</option>
-                <option value="Jun">June</option>
-                <option value="Jul">July</option>
-                <option value="Aug">August</option>
-                <option value="Sep">September</option>
-                <option value="Oct">October</option>
-                <option value="Nov">November</option>
-                <option value="Dec">December</option>
-            </select>
+        <div class="mt-10"> <!-- Increased vertical spacing -->
+          <button id="predictButton" class="w-full py-2 rounded text-white button" disabled>
+            Predict Price (AUD$/wk)
+          </button>
+          <div id="message" class="mt-2 p-2 bg-gray-700 rounded"></div>
         </div>
+      </div>
+    </div>
 
       <script>
         // Define the list of localities, streets, and agencies
@@ -2675,10 +2805,6 @@
         checkFields();
       </script>
 
-      <button class="button" id="predictButton" disabled>
-        Predict Price (AUD$/wk)
-      </button>
-      <div id="message" class="result"></div>
     </div>
     <script>
       document
