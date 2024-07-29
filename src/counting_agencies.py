@@ -1,4 +1,7 @@
+import csv
+import time
 from io import StringIO, BytesIO
+from botocore.exceptions import ClientError
 
 import boto3
 import pandas as pd
@@ -12,6 +15,7 @@ greaterThanAgencies = {}
 
 # Initialize a session using Amazon S3
 s3 = boto3.client("s3")
+manual = True
 
 # Specify the bucket name and the name you want to give the file
 bucket_name = "team-houses-bucket"
@@ -130,13 +134,137 @@ models = response["Models"]
 original = pd.read_csv("../data/housing-data.csv")
 predicted = pd.read_csv("../data/prediction.csv")
 
+
+def extract_first_n_rows(input_file, output_file, n=1):
+    """
+    Extract the first n rows from an input CSV file and save them to an output CSV file.
+
+    :param input_file: Path to the input CSV file
+    :param output_file: Path to the output CSV file
+    :param n: Number of rows to extract
+    """
+    # Read the CSV file
+    df = pd.read_csv(input_file)
+
+    # Get the first n rows
+    df_first_n = df.head(n)
+
+    # Write to a new CSV file
+    df_first_n.to_csv(output_file, index=False)
+
+
+# Example usage
+input_csv = "../data/housing-data-noAgencies.csv"
+output_csv = "../data/housing-data-noAgencies-first5.csv"
+
+extract_first_n_rows(input_csv, output_csv)
+
+# Step 1: Set up your environment
+s3_client = boto3.client("s3")
+sagemaker_client = boto3.client("sagemaker")
+
+bucket_name = "team-houses-bucket"
+file_path = "../data/housing-data-noAgencies-first5.csv"
+s3_key = "testNoAgencies.csv"
+model_name = "canvas-model-2024-07-29-01-44-58-425732"
+
+# List models
+response = sagemaker_client.list_models()
+models = response["Models"]
+for model in models:
+    print(model["ModelName"])
+
+# Step 2: Upload your CSV file to S3
+s3_client.upload_file(file_path, bucket_name, s3_key)
+print(f"File uploaded to s3://{bucket_name}/{s3_key}")
+transform_job_name = "transform-job-test-final-1"
+
+
+def batch_transform(name):
+    # Step 3: Create a batch transform job
+    input_s3_uri = f"s3://{bucket_name}/{s3_key}"
+    output_s3_uri = f"s3://{bucket_name}/final_output"
+
+    response = sagemaker_client.create_transform_job(
+        TransformJobName=name,
+        ModelName=model_name,
+        MaxConcurrentTransforms=1,
+        MaxPayloadInMB=6,
+        BatchStrategy="SingleRecord",
+        TransformOutput={
+            "S3OutputPath": output_s3_uri,
+            "Accept": "text/csv",
+        },
+        TransformInput={
+            "DataSource": {
+                "S3DataSource": {"S3DataType": "S3Prefix", "S3Uri": input_s3_uri}
+            },
+            "ContentType": "text/csv",
+            "SplitType": "Line",
+        },
+        TransformResources={"InstanceType": "ml.m5.large", "InstanceCount": 1},
+    )
+
+    print(f'Transform job started: {response["TransformJobArn"]}')
+
+    # Step 4: Check the status of the transform job
+    count = 0
+    while True:
+        response = sagemaker_client.describe_transform_job(TransformJobName=name)
+        status = response["TransformJobStatus"]
+        if status in ["Completed", "Failed", "Stopped"]:
+            print(f"Transform job ended with status: {status}")
+            break
+        print(f"Transform job is still in progress: {status} {count}")
+        time.sleep(0.5)
+        count += 1
+
+    # Step 5: Retrieve the output from S3
+    output_file = "../data/output.csv"
+    output_s3_key = "output/" + s3_key + ".out"
+
+    s3_client.download_file(bucket_name, output_s3_key, output_file)
+    print(f"Output downloaded to {output_file}")
+
+
+while True:
+    mode = input("would you like to do this manually? (Y/N) ")
+    if mode == "Y" or mode == "y":
+        manual = True
+        input(
+            "Follow the instructions in the agency_rankings.md file to generate the prediction "
+            "manually in Sagemaker. Hit enter once this has been completed."
+        )
+        break
+    elif mode == "N" or mode == "n":
+        manual = False
+        break
+
+if not manual:
+    count = 0
+    while True:
+        try:
+            batch_transform(transform_job_name)
+            break
+        except ClientError as e:
+            transform_job_name = transform_job_name + str(count)
+
 weekly_price_array = original["Weekly_Price"].to_numpy()
-predicted_price_array = predicted["Weekly_Price"].to_numpy()
+if manual:
+    predicted_price_array = predicted["Weekly_Price"].to_numpy()
+else:
+    predicted_price_array = []
+    with open("../data/output.csv", mode="r", newline="") as file:
+        reader = csv.reader(file)
+        for row in reader:
+            predicted_price_array.append(float(row[0]))
+            print(float(row[0]))
+
 agencies = original["Agency_Name"]
 differences = []
 differenceDict = {}
 
-for i in range(0, len(weekly_price_array)):
+for i in range(0, len(predicted_price_array)):
     differences += [
         (weekly_price_array[i] - predicted_price_array[i]) / weekly_price_array[i]
     ]
@@ -168,7 +296,7 @@ def generate_graph(data, colors, title):
     # labels for bars
     tick_label = []
 
-    for item in range(0, 10):
+    for item in range(0, 5):
         left.append(item)
         height.append(data[item][1])
         tick_label.append(data[item][0].replace(" ", "\n"))
