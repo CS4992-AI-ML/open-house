@@ -67,7 +67,7 @@ Conda Environment -> Create new environment -> Set Python Version to 3.11 -> Cli
 Make sure Python's Version is set to 3.11.0.
 If not, double click the version -> Specify Version -> 3.11 -> Wait for install -> Reset IDE
 ```
-![img.png](readme-imgs/img.png)
+![img.png](readme_imgs/img.png)
 
 ## Step 4: Test Interpreter is setup
 
