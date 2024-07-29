@@ -23,7 +23,7 @@ We will use machine learning to predict the market average price of rental prope
 Cleaning the data to make it usable for machine learning was a critical step. We needed to handle missing data, parse inconsistently structured data, and convert data types. 
 
 ### Data Cleaning Steps
-The major blocker was inconsistent data. Specifically, the Weekly Price column was not consistently formatted. 
+The major blocker was inconsistent data. Specifically, the Weekly Price column was not consistently formatted.
 
 Here is an example of the data inconsistency just for this column:
 ```
@@ -37,11 +37,18 @@ Here is an example of the data inconsistency just for this column:
 
 We needed to come up with a complex regex pattern to extract the weekly price from the text. After many, many iterations, we were able to accurately extract the weekly price from the text.
 
-Even still, we had to handle missing data. We decided to drop rows with impactful missing data, as we had enough data to work with. These columns included Month Listed and Post Code. We also removed all non-Housing or Unit plots. Commercial, Industrial, and Land plots skewed our data and did not align with our goals. 
+## Creating the Model
+Even with now cleaned data, we had to handle missing data. We decided to drop rows with impactful missing data, as we had enough data to work with. These columns included Month Listed and Post Code. We also removed all non-Housing or Unit plots. Commercial, Industrial, and Land plots skewed our data and did not align with our goals. 
 
 ### Measuring our Model's Accuracy
 We used the RMSE provided by AWS Sagemaker's regression model to measure our model's accuracy. We were able to achieve an RMSE of about 160, which we believe is a solid start. If we were provided with more data, or even more complete data, we believe we could improve this score.
 
+
+## Creating a Frontend
+Once we had our model up and running, it was time to actual get the model working. We decided to use chalice, a serverless framework that integrates seamlessly with AWS. We have 3 main endpoints in the app: the homepage, the `prediction` endpoint, and the `manifest` endpoint.
+The page is quite simple, it is just a form with some dropdowns populated by the `manifest` endpoint. When the form is submitted, a POST request is sent to `predict`. We call the model on the backend with the form data and return the predicted price.
+
+We chose to go with a basic static HTML page for the frontend. We wanted to keep the focus on the model and the data, and not get bogged down in the frontend. We believe that the model is the most important part of the project, and we wanted to make sure that it was the focus. Plus, the learning curve for chalice was quite simple, so it was a no-brainer to use it.
 # _Dev Setup_
 
 ## Step 1: Installing Anaconda and Python
@@ -60,7 +67,7 @@ Conda Environment -> Create new environment -> Set Python Version to 3.11 -> Cli
 Make sure Python's Version is set to 3.11.0.
 If not, double click the version -> Specify Version -> 3.11 -> Wait for install -> Reset IDE
 ```
-![img.png](readme-imgs/img.png)
+![img.png](readme_imgs/img.png)
 
 ## Step 4: Test Interpreter is setup
 
@@ -108,3 +115,9 @@ To see the sample S3 JSON run this:
 ```angular2html
 python ./tests/test_squid.py
 ```
+
+## Explanation of our Files
+### - [clean_data.py](./readme-script/clean_data.md)
+### - [cleaning_utils.py](./readme-script/cleaning_utils.md)
+### - [data_imports.py](./readme-script/data_imports.md)
+### - [upload_s3.py](./readme-script/upload_s3.md)
