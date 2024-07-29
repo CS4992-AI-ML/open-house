@@ -30,7 +30,6 @@ def get_info():
     logger.info("Get info endpoint called")
     try:
         response = get_manifest_json()
-        logger.info(f"Response from manifest_json: {response}")
     except Exception as e:
         logger.error("Error getting manifest: %s", e)
         return Response(
