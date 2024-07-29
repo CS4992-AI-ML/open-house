@@ -3,6 +3,8 @@ import os
 from chalice import Chalice, Response
 import logging
 import boto3
+
+from chalicelib.manifest_json import get_manifest_json
 from chalicelib.predict_price import predict_price
 
 logger = logging.getLogger()
@@ -21,6 +23,24 @@ def index():
         ).read(),
         headers={"Content-Type": "text/html"},
     )
+
+
+@app.route("/manifest")
+def get_info():
+    logger.info("Get info endpoint called")
+    try:
+        response = get_manifest_json()
+    except Exception as e:
+        logger.error("Error getting manifest: %s", e)
+        return Response(
+            body={"error": f"Failed to retrieve manifest [{type(e).__name__}]"},
+            status_code=500,
+            headers={
+                "Content-Type": "application/json",
+                "Cache-Control": "max-age=600",
+            },
+        )
+    return response
 
 
 @app.route("/predict", methods=["POST"], content_types=["application/json"])
