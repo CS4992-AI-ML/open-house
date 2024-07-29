@@ -42,11 +42,3 @@ The `get_relative_month` function calculates the number of months between a give
   2. **Calculate Differences**: Computes the difference in years and months between the fixed reference date and the parsed date.
   3. **Calculate Relative Months**: Converts these differences into a total month count.
   4. **Return Value**: Returns the total number of months between the two dates.
-
-## Additional Notes
-
-- **Regular Expression**: The regex pattern is flexible to accommodate various price formats. Adjustments may be necessary if different formats are encountered.
-- **Error Handling**: Basic error handling is included for conversion operations. Ensure the input text follows expected formats to avoid errors.
-- **Date Format**: The `get_relative_month` function expects dates in "Month Year" format. Verify that input dates conform to this format to prevent parsing errors.
-
-For more information on regular expressions and date handling, refer to the [Python `re` documentation](https://docs.python.org/3/library/re.html) and [Python `datetime` documentation](https://docs.python.org/3/library/datetime.html).

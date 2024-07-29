@@ -47,9 +47,3 @@ The `upload_to_s3` function is responsible for uploading a file to an S3 bucket 
   6. **Return Upload Status**:
      - **Purpose**: Indicate the success or failure of the file upload.
      - **Action**: Return `True` if the file is successfully uploaded. Return `False` if any issues occurred during the upload process.
-
-## Additional Notes
-
-- **File Existence Check**: The function checks if the file already exists in the S3 bucket and allows for renaming if necessary. This prevents accidental overwrites.
-- **Error Handling**: Includes handling for missing files and credentials. Ensure that AWS credentials are configured properly and that the file path is correct.
-- **User Interaction**: If a file with the same name exists, the function prompts the user for a new name or to cancel the upload. This provides flexibility in managing file uploads.

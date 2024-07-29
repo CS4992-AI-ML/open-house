@@ -49,12 +49,3 @@ The script prompts the user to enter a filename for the cleaned data. It then ex
 ### 11. Optional Upload to S3
 
 Finally, the script asks the user whether they want to upload the cleaned CSV file to an Amazon S3 bucket. If the user agrees, it uses a custom function to upload the file to the specified S3 bucket and provides feedback on whether the upload was successful or failed. If the user declines, it notifies them that the upload was canceled.
-
-## Additional Notes
-
-- **CSV File Path**: Ensure that the CSV file is located at the specified path or adjust the path as needed.
-- **Environment Variables**: Verify that the `.env` file contains the necessary AWS credentials and configurations.
-- **Error Handling**: The script does not include detailed error handling. Consider adding error handling mechanisms to manage potential issues during file reading, processing, and uploading.
-- **Custom Functions**: Ensure that the custom functions used in the script (`extract_weekly_price`, `get_relative_month`, and `upload_to_s3`) are correctly implemented and tested.
-
-For more details on the custom functions and modules used in the script, refer to the `upload_s3` and `cleaning_util` modules.
