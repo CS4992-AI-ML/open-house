@@ -37,7 +37,6 @@ def get_info():
             status_code=500,
             headers={
                 "Content-Type": "application/json",
-                "Cache-Control": "max-age=600",
             },
         )
     return response
