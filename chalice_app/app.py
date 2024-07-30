@@ -67,5 +67,4 @@ def predict():
             headers={"Content-Type": "application/json"},
         )
 
-    logger.info("Predicted Price: %s", response)
     return {"prediction": response}
