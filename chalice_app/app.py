@@ -37,7 +37,6 @@ def get_info():
             status_code=500,
             headers={
                 "Content-Type": "application/json",
-                "Cache-Control": "max-age=600",
             },
         )
     return response
@@ -67,5 +66,4 @@ def predict():
             headers={"Content-Type": "application/json"},
         )
 
-    logger.info("Predicted Price: %s", response)
     return {"prediction": response}
